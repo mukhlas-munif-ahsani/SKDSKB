@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "92621004929",
+    "firebase_url": "https://skdskb-8a08b.firebaseio.com",
+    "project_id": "skdskb-8a08b",
+    "storage_bucket": "skdskb-8a08b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:92621004929:android:d8145f1039eb790fc9ad80",
+        "android_client_info": {
+          "package_name": "com.munifahsan.skdskb"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "92621004929-brc6ngtetkao01fs088hnst0l8dmpapp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB1trh11qAcUT9us9Y8Ep0_2kLLp_psusM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "92621004929-brc6ngtetkao01fs088hnst0l8dmpapp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

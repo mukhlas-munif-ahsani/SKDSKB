@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/itemHome"
+        android:icon="@drawable/state_bot_nav_ic_home"
+        android:title="Home" />
+
+    <item
+        android:id="@+id/itemInformasi"
+        android:icon="@drawable/state_bot_nav_ic_informasi"
+        android:title="Informasi" />
+
+    <item
+        android:id="@+id/itemTryout"
+        android:icon="@drawable/state_bot_nav_ic_tryout"
+        android:title="Tryout" />
+
+    <item
+        android:id="@+id/itemBookmark"
+        android:icon="@drawable/state_bot_nav_ic_bookmark"
+        android:title="Bookmark" />
+
+    <item
+        android:id="@+id/itemSetting"
+        android:icon="@drawable/state_bot_nav_ic_setting"
+        android:title="Pengaturan" />
+</menu>
