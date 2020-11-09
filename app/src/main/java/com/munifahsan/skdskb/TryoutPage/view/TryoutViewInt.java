@@ -1,6 +1,6 @@
-package com.munifahsan.skdskb.InformasiPage.view;
+package com.munifahsan.skdskb.TryoutPage.view;
 
-public interface InformasiViewInt {
+public interface TryoutViewInt {
     void setQuote(String quote, String talker);
 
     void hideQuote();

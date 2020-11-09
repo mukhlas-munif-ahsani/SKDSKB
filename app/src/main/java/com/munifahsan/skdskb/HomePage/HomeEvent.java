@@ -12,6 +12,15 @@ public class HomeEvent {
     String nama;
     String imageUrl;
     String quote;
+    String talker;
+
+    public String getTalker() {
+        return talker;
+    }
+
+    public void setTalker(String talker) {
+        this.talker = talker;
+    }
 
     public int getEventType() {
         return eventType;

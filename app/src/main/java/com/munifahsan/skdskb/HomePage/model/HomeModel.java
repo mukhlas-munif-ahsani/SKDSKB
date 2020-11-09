@@ -5,6 +5,7 @@ public class HomeModel {
     String nQuote;
     String nNama;
     String nImageUrl;
+    String nTalker;
 
     public HomeModel() {
     }
@@ -23,5 +24,9 @@ public class HomeModel {
 
     public String getnImageUrl() {
         return nImageUrl;
+    }
+
+    public String getnTalker() {
+        return nTalker;
     }
 }

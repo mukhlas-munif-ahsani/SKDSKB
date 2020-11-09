@@ -38,7 +38,7 @@ public class InformasiPres implements InformasiPresInt{
     public void onEventMainThread(InformasiEvent event){
         switch (event.getEventType()){
             case onGetDataSuccess:
-                getDataSuccess();
+                getDataSuccess(event.getQuote(), event.getTalker());
                 break;
             case onGetDataError:
                 getDataError(event.getErrorMessage());
@@ -47,13 +47,16 @@ public class InformasiPres implements InformasiPresInt{
     }
 
     private void getDataError(String errorMessage) {
+        mInformasiView.showMessage(errorMessage);
     }
 
-    private void getDataSuccess() {
+    private void getDataSuccess(String quote, String talker) {
+        mInformasiView.setQuote(quote, talker);
     }
 
     @Override
     public void getData(){
-
+        mInformasiView.hideQuote();
+        mInformasiRepo.getData();
     }
 }

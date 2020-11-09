@@ -19,7 +19,7 @@ import com.munifahsan.skdskb.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriModel, KategoriInformasiAdapter.Holder> {
+public class AllKategoriAdapter extends FirestoreRecyclerAdapter<KategoriModel, AllKategoriAdapter.Holder> {
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -29,16 +29,16 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
 
     public OnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
         this.onItemClickListener = onItemClickListener;
     }
 
-    public KategoriInformasiAdapter(@NonNull FirestoreRecyclerOptions<KategoriModel> options) {
+    public AllKategoriAdapter(@NonNull FirestoreRecyclerOptions<KategoriModel> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull KategoriInformasiAdapter.Holder holder, int position, @NonNull KategoriModel model) {
+    protected void onBindViewHolder(@NonNull AllKategoriAdapter.Holder holder, int position, @NonNull KategoriModel model) {
         Glide.with(holder.itemView)
                 .load(model.getnImageUrl())
                 .fitCenter()
@@ -51,12 +51,12 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
 
     @NonNull
     @Override
-    public KategoriInformasiAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_kategori, parent, false);
-        return new KategoriInformasiAdapter.Holder(view);
+    public AllKategoriAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_kategori, parent, false);
+        return new AllKategoriAdapter.Holder(view);
     }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.imageView_itemKategori)
         ImageView mImage;
         @BindView(R.id.textView_title_itemKategori)

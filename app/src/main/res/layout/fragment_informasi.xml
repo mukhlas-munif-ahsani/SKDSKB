@@ -1,14 +1,348 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".InformasiPage.view.InformasiFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/Toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/bgBlue"
+                app:cardElevation="0dp"
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="@dimen/page_margin"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:text="INFORMASI"
+                            android:textColor="@color/textColor1"
+                            android:textSize="20dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="8dp">
+
+                        <TextView
+                            android:id="@+id/textView_quote_informasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.8"
+                            android:text="Lorem ipsum dolor init itu tulisan dummy yang ga ada arti apa apa dan sering digunakan oleh develoepr"
+                            android:textAlignment="center"
+                            android:textColor="@color/textColor1"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textView_talker_informasi0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView_quote_informasi"
+                            android:layout_marginTop="4dp"
+                            android:layout_toStartOf="@+id/textView_talker_informasi"
+                            android:alpha="0.7"
+                            android:text="-- "
+                            android:textColor="@color/textColor1"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/textView_talker_informasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView_quote_informasi"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:alpha="0.7"
+                            android:text="Hbaib"
+                            android:textColor="@color/textColor1"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/textView_talker_informasi2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/textView_quote_informasi"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="4dp"
+                            android:layout_toEndOf="@+id/textView_talker_informasi"
+                            android:alpha="0.7"
+                            android:text=" --"
+                            android:textColor="@color/textColor1"
+                            android:textSize="12sp" />
+
+                        <com.facebook.shimmer.ShimmerFrameLayout
+                            android:id="@+id/quoteShimmer_informasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:visibility="invisible">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="18dp"
+                                    android:backgroundTint="@color/grey"
+                                    app:cardCornerRadius="10dp" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="18dp"
+                                    android:layout_marginStart="25dp"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginEnd="25dp"
+                                    android:backgroundTint="@color/grey"
+                                    app:cardCornerRadius="10dp" />
+                            </LinearLayout>
+
+                        </com.facebook.shimmer.ShimmerFrameLayout>
+                    </RelativeLayout>
+
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/bgBlue"
+                app:cardElevation="0dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="24dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="24dp">
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="54dp"
+                            android:alpha="0.2"
+                            android:backgroundTint="@color/white"
+                            app:cardCornerRadius="11dp" />
+
+                        <EditText
+                            android:id="@+id/editText_search_informasi"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginEnd="12dp"
+                            android:layout_toStartOf="@+id/cardView_search_home"
+                            android:autofillHints="Mau belajar apa hari ini ?"
+                            android:background="@null"
+                            android:hint="Mau belajar apa hari ini ?"
+                            android:inputType="text"
+                            android:textSize="14sp" />
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/cardView_search_informasi"
+                            android:layout_width="40dp"
+                            android:layout_height="39dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_margin="8dp"
+                            android:background="@color/white"
+                            app:cardCornerRadius="11dp">
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:src="@drawable/ic_baseline_search"
+                                app:tint="@color/black" />
+                        </androidx.cardview.widget.CardView>
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/kategorimateri_informasi"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:layout_marginTop="8dp"
+                        android:text="Kategori Informasi"
+                        android:textColor="@color/textColor1"
+                        android:textSize="18sp" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:scrollbars="none">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <LinearLayout
+                                android:id="@+id/kategoriContent_informasi"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="horizontal"
+                                android:paddingStart="@dimen/page_margin"
+                                android:paddingEnd="@dimen/page_margin"
+                                android:visibility="visible">
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/recyclerView_kategoriMateri_informasi"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="4dp"
+                                    android:layout_marginBottom="8dp"
+                                    android:clipToPadding="false"
+                                    android:scrollbars="none" />
+
+                                <androidx.cardview.widget.CardView
+                                    android:id="@+id/cardView_allKateoriMateri_informasi"
+                                    android:layout_width="83dp"
+                                    android:layout_height="87dp"
+                                    android:layout_marginStart="10dp"
+                                    android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="4dp"
+                                    android:backgroundTint="@color/colorPrimary"
+                                    app:cardCornerRadius="15dp"
+                                    app:cardElevation="0dp">
+
+                                    <ImageView
+                                        android:id="@+id/imageView_itemKategori"
+                                        android:layout_width="70dp"
+                                        android:layout_height="70dp"
+                                        android:layout_gravity="center"
+                                        android:alpha="0.8"
+                                        android:src="@drawable/ic_all_kategori" />
+
+                                </androidx.cardview.widget.CardView>
+                            </LinearLayout>
+
+                            <include layout="@layout/shimmer_kategori_materi_informasi" />
+
+                        </RelativeLayout>
+
+                    </HorizontalScrollView>
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/appbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:id="@+id/lin_listOne_informasi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:visibility="visible">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:layout_marginTop="18dp"
+                        android:layout_marginEnd="@dimen/page_margin">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.9"
+                            android:text="Pilihan Editor"
+                            android:textColor="@color/textColor2"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/textView_allListOne_informasi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentBottom="true"
+                            android:alpha="0.6"
+                            android:text="Lihat Semua"
+                            android:textColor="@color/textColor2"
+                            android:textSize="12sp" />
+                    </RelativeLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="16dp"
+                        android:background="@color/grey" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerView_listOne_informasi"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="@dimen/page_margin"
+                        android:layout_marginBottom="8dp"
+                        android:clipToPadding="false" />
+                </LinearLayout>
+
+                <include layout="@layout/shimmer_list_one_informasi" />
+
+            </RelativeLayout>
+
+        </androidx.core.widget.NestedScrollView>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/bottom_sheet_kategori_informasi" />
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </FrameLayout>

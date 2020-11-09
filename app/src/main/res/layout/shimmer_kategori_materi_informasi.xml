@@ -4,9 +4,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/kategoriShimmer_home"
+        android:id="@+id/kategoriShimmer_informasi"
         android:layout_width="match_parent"
-        android:visibility="invisible"
+        android:visibility="gone"
         android:layout_height="match_parent">
 
         <LinearLayout

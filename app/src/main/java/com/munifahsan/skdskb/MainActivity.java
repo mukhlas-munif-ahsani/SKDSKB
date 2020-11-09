@@ -12,7 +12,7 @@ import com.munifahsan.skdskb.BoomarkPage.BookmarkFragment;
 import com.munifahsan.skdskb.HomePage.view.HomeFragment;
 import com.munifahsan.skdskb.InformasiPage.view.InformasiFragment;
 import com.munifahsan.skdskb.SettingPage.SettingFragment;
-import com.munifahsan.skdskb.TryoutPage.TryoutFragment;
+import com.munifahsan.skdskb.TryoutPage.view.TryoutFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

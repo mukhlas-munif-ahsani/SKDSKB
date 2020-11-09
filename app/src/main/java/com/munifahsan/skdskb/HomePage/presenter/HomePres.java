@@ -39,13 +39,13 @@ public class HomePres implements HomePresInt {
     public void onEventMainThread(HomeEvent event) {
         switch (event.getEventType()) {
             case onSuccess:
-                onSuccess(event.getGreeting(), event.getQuote());
+                onSuccess(event.getGreeting(), event.getQuote(), event.getTalker());
                 break;
             case onGetNamaImageSuccess:
                 onGetNamaImageSuccess(event.getNama(), event.getImageUrl());
                 break;
             case onError:
-                onError();
+                onError(event.getErrorMessage());
                 break;
         }
     }
@@ -55,16 +55,19 @@ public class HomePres implements HomePresInt {
         mHomeVIew.setmPhoto(imageUrl);
     }
 
-    private void onError() {
+    private void onError(String error) {
+        mHomeVIew.showMessage(error);
     }
 
-    private void onSuccess(String greeting, String quote) {
+    private void onSuccess(String greeting, String quote, String talker) {
         mHomeVIew.setmGreeting(greeting);
         mHomeVIew.setmQuote(quote);
+        mHomeVIew.setTalker(talker);
     }
 
     @Override
     public void getData() {
+        mHomeVIew.hideTalker();
         mHomeVIew.hideQuote();
         mHomeVIew.hideNama();
         mHomeVIew.hidePhoto();

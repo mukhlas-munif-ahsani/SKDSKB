@@ -1,6 +1,6 @@
-package com.munifahsan.skdskb.InformasiPage;
+package com.munifahsan.skdskb.TryoutPage;
 
-public class InformasiEvent {
+public class TryoutEvent {
     public static final int onGetDataSuccess = 0;
     public static final int onGetDataError = 1;
 

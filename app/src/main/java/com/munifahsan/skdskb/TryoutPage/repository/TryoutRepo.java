@@ -1,4 +1,4 @@
-package com.munifahsan.skdskb.InformasiPage.repository;
+package com.munifahsan.skdskb.TryoutPage.repository;
 
 import androidx.annotation.NonNull;
 
@@ -9,15 +9,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.munifahsan.skdskb.EventBus.EventBus;
 import com.munifahsan.skdskb.EventBus.GreenRobotEventBus;
-import com.munifahsan.skdskb.InformasiPage.InformasiEvent;
-import com.munifahsan.skdskb.InformasiPage.model.InformasiModel;
-import com.munifahsan.skdskb.InformasiPage.model.InformasiPageModel;
+import com.munifahsan.skdskb.TryoutPage.TryoutEvent;
+import com.munifahsan.skdskb.TryoutPage.model.TryoutPageModel;
 
-public class InformasiRepo implements InformasiRepoInt {
+public class TryoutRepo implements TryoutRepoInt {
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private DocumentReference mPageRef = firebaseFirestore.collection("PAGE_CONTENT").document("INFORMASI");
+    private DocumentReference mPageRef = firebaseFirestore.collection("PAGE_CONTENT").document("TRYOUT");
 
-    public InformasiRepo() {
+    public TryoutRepo() {
+
     }
 
     @Override
@@ -26,8 +26,8 @@ public class InformasiRepo implements InformasiRepoInt {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()){
-                    InformasiPageModel model = documentSnapshot.toObject(InformasiPageModel.class);
-                    postEvent(InformasiEvent.onGetDataSuccess, null,
+                    TryoutPageModel model = documentSnapshot.toObject(TryoutPageModel.class);
+                    postEvent(TryoutEvent.onGetDataSuccess, null,
                             model.getnQuote(),
                             model.getnTalker());
                 }
@@ -35,17 +35,17 @@ public class InformasiRepo implements InformasiRepoInt {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                postEvent(InformasiEvent.onGetDataError, e.getMessage(), null, null);
+                postEvent(TryoutEvent.onGetDataError, e.getMessage(), null, null);
             }
         });
     }
 
-    public void postEvent(int type, String errorMessage, String quote, String talker) {
-        InformasiEvent event = new InformasiEvent();
+    public void postEvent(int type, String errorMessage, String quote, String talker){
+        TryoutEvent event = new TryoutEvent();
 
         event.setEventType(type);
 
-        if (errorMessage != null) {
+        if (errorMessage != null){
             event.setErrorMessage(errorMessage);
         }
 

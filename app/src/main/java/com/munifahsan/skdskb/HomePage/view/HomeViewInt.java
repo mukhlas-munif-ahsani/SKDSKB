@@ -15,6 +15,10 @@ public interface HomeViewInt {
 
     void setmQuote(String quote);
 
+    void setTalker(String talker);
+
+    void hideTalker();
+
     void hideQuote();
 
     void showMessage(String msg);

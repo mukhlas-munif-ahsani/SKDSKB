@@ -29,24 +29,25 @@ public class HomeRepo implements HomeRepoInt {
                     HomeModel model = documentSnapshot.toObject(HomeModel.class);
                     postEvent(HomeEvent.onSuccess, null,
                             model.getnGreeting(),
-                            model.getnQuote());
+                            model.getnQuote(),
+                            model.getnTalker());
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                postEvent(HomeEvent.onError, e.getMessage(), null, null);
+                postEvent(HomeEvent.onError, e.getMessage(), null, null, null);
             }
         });
     }
 
     @Override
-    public void getUserData(String id){
+    public void getUserData(String id) {
 
     }
 
     @Override
-    public void getFakeNamaProfile(){
+    public void getFakeNamaProfile() {
         mPageRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -60,12 +61,12 @@ public class HomeRepo implements HomeRepoInt {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                postEvent(HomeEvent.onError, e.getMessage(), null, null);
+                postEvent(HomeEvent.onError, e.getMessage(), null, null, null);
             }
         });
     }
 
-    public void postEvent(int type, String errorMessage, String greeting, String quote) {
+    public void postEvent(int type, String errorMessage, String greeting, String quote, String talker) {
         HomeEvent event = new HomeEvent();
 
         event.setEventType(type);
@@ -80,6 +81,10 @@ public class HomeRepo implements HomeRepoInt {
 
         if (quote != null) {
             event.setQuote(quote);
+        }
+
+        if (talker != null) {
+            event.setTalker(talker);
         }
 
         EventBus eventBus = GreenRobotEventBus.getInstance();

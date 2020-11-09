@@ -94,6 +94,12 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     TextView mQuote;
     @BindView(R.id.quoteShimmer_home)
     ShimmerFrameLayout mQuoteShimmer;
+    @BindView(R.id.textView_talker_home0)
+    TextView mTalker0;
+    @BindView(R.id.textView_talker_home)
+    TextView mTalker;
+    @BindView(R.id.textView_talker_home2)
+    TextView mTalker2;
 
     private FirebaseAuth mAuth;
     private String mCurrent_id;
@@ -330,7 +336,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         mListTwoContent.setVisibility(View.GONE);
         mShimmerListTwo.setVisibility(View.VISIBLE);
 
-        query = mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING);
+        query = mListRef.whereEqualTo("nTipe", "materi").orderBy("nUploadTime", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<MateriModel> options = new FirestoreRecyclerOptions.Builder<MateriModel>()
                 .setQuery(query, MateriModel.class)
                 .build();
@@ -380,6 +386,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        mHomePres.onDestroy();
         mKategoriAdapter.stopListening();
         mAllKategoriAdapter.stopListening();
         mListOneAdapter.stopListening();
@@ -407,23 +414,27 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     }
 
     @OnClick(R.id.cardView_search_home)
-    public void searchClick(){
+    public void searchClick() {
         String value = mSearchField.getText().toString();
-        showMessage(value);
+        if (value.isEmpty()) {
+            showMessage("kosong bro");
+        }
+        //showMessage(value);
     }
 
     @OnClick(R.id.textView_allListOne_home)
-    public void allListOneClick(){
+    public void allListOneClick() {
         showMessage("click");
     }
 
     @OnClick(R.id.textView_allListTwo_home)
-    public void allListTwoClick(){
+    public void allListTwoClick() {
         showMessage("click");
     }
 
     @Override
     public void setmGreeting(String greeting) {
+        mSearchField.setEnabled(true);
         mGreeting.setVisibility(View.VISIBLE);
         mGreetingShimmer.setVisibility(View.INVISIBLE);
         mGreeting.setText(greeting);
@@ -431,6 +442,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 
     @Override
     public void hideGreeting() {
+        mSearchField.setEnabled(false);
         mGreeting.setVisibility(View.INVISIBLE);
         mGreetingShimmer.setVisibility(View.VISIBLE);
     }
@@ -469,6 +481,21 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         mQuoteShimmer.setVisibility(View.INVISIBLE);
         mQuote.setVisibility(View.VISIBLE);
         mQuote.setText(quote);
+    }
+
+    @Override
+    public void setTalker(String talker) {
+        mTalker2.setVisibility(View.VISIBLE);
+        mTalker0.setVisibility(View.VISIBLE);
+        mTalker.setVisibility(View.VISIBLE);
+        mTalker.setText(talker);
+    }
+
+    @Override
+    public void hideTalker() {
+        mTalker2.setVisibility(View.INVISIBLE);
+        mTalker0.setVisibility(View.INVISIBLE);
+        mTalker.setVisibility(View.INVISIBLE);
     }
 
     @Override
