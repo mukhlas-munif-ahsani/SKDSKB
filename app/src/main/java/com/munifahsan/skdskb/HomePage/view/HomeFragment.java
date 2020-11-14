@@ -1,5 +1,6 @@
 package com.munifahsan.skdskb.HomePage.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -31,15 +32,17 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.munifahsan.skdskb.HomePage.adapter.AllKategoriAdapter;
-import com.munifahsan.skdskb.HomePage.adapter.KategoriMateriAdapter;
+import com.munifahsan.skdskb.Adapters.KategoriAdapter;
+import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
+import com.munifahsan.skdskb.Adapters.AllKategoriAdapter;
 import com.munifahsan.skdskb.HomePage.adapter.ListOneAdapter;
 import com.munifahsan.skdskb.HomePage.adapter.ListTwoAdapter;
-import com.munifahsan.skdskb.HomePage.model.KategoriModel;
+import com.munifahsan.skdskb.Models.KategoriModel;
 import com.munifahsan.skdskb.HomePage.model.MateriModel;
 import com.munifahsan.skdskb.HomePage.presenter.HomePres;
 import com.munifahsan.skdskb.HomePage.presenter.HomePresInt;
 import com.munifahsan.skdskb.R;
+import com.munifahsan.skdskb.Search.SearchActivity;
 import com.munifahsan.skdskb.SpacesItemDecoration;
 
 import butterknife.BindView;
@@ -109,12 +112,14 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference mKategoriRef = firebaseFirestore.collection("KATEGORI_MATERI");
     private CollectionReference mListRef = firebaseFirestore.collection("POST");
-    private KategoriMateriAdapter mKategoriAdapter;
+    private KategoriAdapter mKategoriAdapter;
     private AllKategoriAdapter mAllKategoriAdapter;
     private ListOneAdapter mListOneAdapter;
     private ListTwoAdapter mListTwoAdapter;
     FirebaseUser mCurrentUser;
     Query query;
+
+    Bundle bundle = new Bundle();
 
     private BottomSheetBehavior mBottomSheetBehavior;
 
@@ -228,15 +233,21 @@ public class HomeFragment extends Fragment implements HomeViewInt {
             }
         });
 
-        mKategoriAdapter = new KategoriMateriAdapter(options);
+        mKategoriAdapter = new KategoriAdapter(options);
 
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRvKategori.setLayoutManager(mLayoutManager);
         mRvKategori.setAdapter(mKategoriAdapter);
 
-        mKategoriAdapter.setOnItemClickListener(new KategoriMateriAdapter.OnItemClickListener() {
+        mKategoriAdapter.setOnItemClickListener(new KategoriAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
+            public void onItemClick(String id, int position, String kategori, String collection) {
+                Intent intent = new Intent(getActivity(), DetailKategoriActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                intent.putExtra("KATEGORI", kategori);
+                intent.putExtra("COLLECTION", collection);
+
+                startActivity(intent);
                 showMessage("clicked");
             }
         });
@@ -277,8 +288,13 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 
         mAllKategoriAdapter.setOnItemClickListener(new AllKategoriAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String kategori, String collection) {
+                Intent intent = new Intent(getActivity(), DetailKategoriActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                intent.putExtra("KATEGORI", kategori);
+                intent.putExtra("COLLECTION", collection);
+
+                startActivity(intent);
             }
         });
     }
@@ -415,8 +431,12 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 
     @OnClick(R.id.cardView_search_home)
     public void searchClick() {
-        String value = mSearchField.getText().toString();
-        if (value.isEmpty()) {
+        String value = mSearchField.getText().toString().trim();
+        if (!value.isEmpty()) {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            intent.putExtra("SEARCH_VALUE", value);
+            startActivity(intent);
+        } else {
             showMessage("kosong bro");
         }
         //showMessage(value);

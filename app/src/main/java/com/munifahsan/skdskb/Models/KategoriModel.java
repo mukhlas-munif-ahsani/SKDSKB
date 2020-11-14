@@ -1,4 +1,4 @@
-package com.munifahsan.skdskb.HomePage.model;
+package com.munifahsan.skdskb.Models;
 
 import com.google.firebase.firestore.DocumentId;
 
@@ -9,6 +9,7 @@ public class KategoriModel {
     String nImageUrl;
     String nTitle;
     String nKategori;
+    String nCollection;
     int nFont;
 
     public KategoriModel() {
@@ -39,5 +40,9 @@ public class KategoriModel {
 
     public int getnFont() {
         return nFont;
+    }
+
+    public String getnCollection() {
+        return nCollection;
     }
 }

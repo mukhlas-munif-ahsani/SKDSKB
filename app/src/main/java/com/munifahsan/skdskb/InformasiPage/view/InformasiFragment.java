@@ -1,5 +1,6 @@
 package com.munifahsan.skdskb.InformasiPage.view;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -19,7 +20,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.facebook.shimmer.Shimmer;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,14 +30,16 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.munifahsan.skdskb.InformasiPage.adapter.AllKategoriAdapter;
+import com.munifahsan.skdskb.Adapters.AllKategoriAdapter;
+import com.munifahsan.skdskb.Adapters.KategoriAdapter;
+import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
 import com.munifahsan.skdskb.InformasiPage.model.InformasiModel;
-import com.munifahsan.skdskb.InformasiPage.model.KategoriModel;
-import com.munifahsan.skdskb.InformasiPage.adapter.KategoriInformasiAdapter;
+import com.munifahsan.skdskb.Models.KategoriModel;
 import com.munifahsan.skdskb.InformasiPage.adapter.ListInformasiAdapter;
 import com.munifahsan.skdskb.InformasiPage.presenter.InformasiPres;
 import com.munifahsan.skdskb.InformasiPage.presenter.InformasiPresInt;
 import com.munifahsan.skdskb.R;
+import com.munifahsan.skdskb.Search.SearchActivity;
 import com.munifahsan.skdskb.SpacesItemDecoration;
 
 import butterknife.BindView;
@@ -90,7 +92,7 @@ public class InformasiFragment extends Fragment implements InformasiViewInt {
 
     private LinearLayoutManager mLayoutManager;
     private GridLayoutManager mGridLayoutManager;
-    KategoriInformasiAdapter mKategoriAdapter;
+    KategoriAdapter mKategoriAdapter;
     private AllKategoriAdapter mAllKategoriAdapter;
     ListInformasiAdapter mListInformasiAdapter;
 
@@ -178,16 +180,21 @@ public class InformasiFragment extends Fragment implements InformasiViewInt {
             }
         });
 
-        mKategoriAdapter = new KategoriInformasiAdapter(options);
+        mKategoriAdapter = new KategoriAdapter(options);
 
         mLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
         mRvKategori.setLayoutManager(mLayoutManager);
         mRvKategori.setAdapter(mKategoriAdapter);
 
-        mKategoriAdapter.setOnItemClickListener(new KategoriInformasiAdapter.OnItemClickListener() {
+        mKategoriAdapter.setOnItemClickListener(new KategoriAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String kategori, String collection) {
+                Intent intent = new Intent(getActivity(), DetailKategoriActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                intent.putExtra("KATEGORI", kategori);
+                intent.putExtra("COLLECTION", collection);
+
+                startActivity(intent);
             }
         });
     }
@@ -227,8 +234,13 @@ public class InformasiFragment extends Fragment implements InformasiViewInt {
 
         mAllKategoriAdapter.setOnItemClickListener(new AllKategoriAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String kategori, String collection) {
+                Intent intent = new Intent(getActivity(), DetailKategoriActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                intent.putExtra("KATEGORI", kategori);
+                intent.putExtra("COLLECTION", collection);
+
+                startActivity(intent);
             }
         });
     }
@@ -314,8 +326,12 @@ public class InformasiFragment extends Fragment implements InformasiViewInt {
 
     @OnClick(R.id.cardView_search_informasi)
     public void searchOnClick(){
-        String value = mSearchField.getText().toString();
-        if (value.isEmpty()){
+        String value = mSearchField.getText().toString().trim();
+        if (!value.isEmpty()) {
+            Intent intent = new Intent(getActivity(), SearchActivity.class);
+            intent.putExtra("SEARCH_VALUE", value);
+            startActivity(intent);
+        } else {
             showMessage("kosong bro");
         }
     }

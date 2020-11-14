@@ -1,4 +1,4 @@
-package com.munifahsan.skdskb.InformasiPage.adapter;
+package com.munifahsan.skdskb.Adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,13 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.munifahsan.skdskb.InformasiPage.model.KategoriModel;
+import com.munifahsan.skdskb.Models.KategoriModel;
 import com.munifahsan.skdskb.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriModel, KategoriInformasiAdapter.Holder> {
+public class AllKategoriAdapter extends FirestoreRecyclerAdapter<KategoriModel, AllKategoriAdapter.Holder> {
     /**
      * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
      * FirestoreRecyclerOptions} for configuration options.
@@ -29,16 +29,16 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
 
     public OnItemClickListener onItemClickListener;
 
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener){
         this.onItemClickListener = onItemClickListener;
     }
 
-    public KategoriInformasiAdapter(@NonNull FirestoreRecyclerOptions<KategoriModel> options) {
+    public AllKategoriAdapter(@NonNull FirestoreRecyclerOptions<KategoriModel> options) {
         super(options);
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull KategoriInformasiAdapter.Holder holder, int position, @NonNull KategoriModel model) {
+    protected void onBindViewHolder(@NonNull AllKategoriAdapter.Holder holder, int position, @NonNull KategoriModel model) {
         Glide.with(holder.itemView)
                 .load(model.getnImageUrl())
                 .fitCenter()
@@ -46,17 +46,18 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
         holder.mTitle.setText(model.getnTitle());
         holder.mTitle.setTextSize(model.getnFont());
         holder.id = model.getId();
+        holder.collection = model.getnCollection();
         holder.kategori = model.getnKategori();
     }
 
     @NonNull
     @Override
-    public KategoriInformasiAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_kategori, parent, false);
-        return new KategoriInformasiAdapter.Holder(view);
+    public AllKategoriAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_all_kategori, parent, false);
+        return new AllKategoriAdapter.Holder(view);
     }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.imageView_itemKategori)
         ImageView mImage;
         @BindView(R.id.textView_title_itemKategori)
@@ -65,6 +66,7 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
         ConstraintLayout mItem;
 
         String id;
+        String collection;
         String kategori;
 
         public Holder(@NonNull View itemView) {
@@ -77,11 +79,11 @@ public class KategoriInformasiAdapter extends FirestoreRecyclerAdapter<KategoriM
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            onItemClickListener.onItemClick(id, position);
+            onItemClickListener.onItemClick(id, position, kategori, collection);
         }
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String id, int position);
+        void onItemClick(String id, int position,  String kategori, String collection);
     }
 }

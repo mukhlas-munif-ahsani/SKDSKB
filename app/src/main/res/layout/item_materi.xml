@@ -2,7 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/cons_itemMateri"
+    android:paddingStart="@dimen/page_margin"
+    android:paddingEnd="@dimen/page_margin"
     android:layout_width="match_parent"
+    android:background="@drawable/custom_ripple"
     android:layout_height="wrap_content">
 
     <androidx.cardview.widget.CardView

@@ -1,24 +1,22 @@
-package com.munifahsan.skdskb.InformasiPage.model;
+package com.munifahsan.skdskb.DetailKategori;
 
 import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.ServerTimestamp;
 
-public class KategoriModel {
+import java.util.Date;
+
+public class DetailKategoriModel {
 
     @DocumentId
     String id;
     String nImageUrl;
     String nTitle;
+    String nDesc;
     String nKategori;
+    String nCollection;
     int nFont;
 
-    public KategoriModel() {
-    }
-
-    public KategoriModel(String id, String nImageUrl, String nTitle, String nKategori) {
-        this.id = id;
-        this.nImageUrl = nImageUrl;
-        this.nTitle = nTitle;
-        this.nKategori = nKategori;
+    public DetailKategoriModel() {
     }
 
     public String getId() {
@@ -40,4 +38,13 @@ public class KategoriModel {
     public int getnFont() {
         return nFont;
     }
+
+    public String getnCollection() {
+        return nCollection;
+    }
+
+    public String getnDesc() {
+        return nDesc;
+    }
+
 }

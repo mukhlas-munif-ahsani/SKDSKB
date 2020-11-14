@@ -1,11 +1,11 @@
-package com.munifahsan.skdskb.TryoutPage.model;
+package com.munifahsan.skdskb.Models;
 
 import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 
-public class TryoutModel {
+public class MateriListModel {
     @DocumentId
     String id;
     String nTitle;
@@ -16,7 +16,7 @@ public class TryoutModel {
     @ServerTimestamp
     Date nUploadTime;
 
-    public TryoutModel() {
+    public MateriListModel() {
     }
 
     public String getId() {
