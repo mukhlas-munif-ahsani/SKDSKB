@@ -26,9 +26,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.munifahsan.skdskb.Adapters.SearchAdapter;
+import com.munifahsan.skdskb.Articel.ArticleActivity;
 import com.munifahsan.skdskb.DetailKategori.DetailKategoriContract;
+import com.munifahsan.skdskb.Ebook.EbookActivity;
 import com.munifahsan.skdskb.Models.MateriListModel;
 import com.munifahsan.skdskb.R;
+import com.munifahsan.skdskb.Tryout.TryoutActivity;
+import com.munifahsan.skdskb.Video.VideoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +78,7 @@ public class SearchActivity extends AppCompatActivity {
     private LinearLayoutManager mLayoutManager;
 
     String searchValue;
+    String kategori;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,10 +89,11 @@ public class SearchActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         searchValue = intent.getStringExtra("SEARCH_VALUE");
+        kategori = intent.getStringExtra("KATEGORI");
 
         mSearchField.setText(searchValue);
 
-        showList(mListRef);
+        showList(mListRef.whereEqualTo("nTipe", kategori));
         bottomSheetFilter();
     }
 
@@ -208,10 +214,57 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+
+        mAdapter.setOnListItemCliked(new SearchAdapter.OnListItemCliked() {
+            @Override
+            public void onItemCliked(String id, int position, String jenis, boolean isPremium) {
+
+                switch (jenis) {
+                    case "Artikel":
+                        sendToArtikel(id, isPremium);
+                        break;
+                    case "Video":
+                        sendToVideo(id, isPremium);
+                        break;
+                    case "Ebook":
+                        sendToEbook(id, isPremium);
+                        break;
+                    case "Tryout":
+                        sendToTryout(id, isPremium);
+                        break;
+                }
+
+            }
+        });
     }
 
+    private void sendToArtikel(String id, boolean isPremium) {
+        Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToVideo(String id, boolean isPremium) {
+        Intent intent = new Intent(getApplicationContext(), VideoActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToEbook(String id, boolean isPremium) {
+        Intent intent = new Intent(getApplicationContext(), EbookActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToTryout(String id, boolean isPremium) {
+        Intent intent = new Intent(getApplicationContext(), TryoutActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+
     @OnClick(R.id.rel_back_search)
-    public void backOnClick(){
+    public void backOnClick() {
         finish();
     }
 
@@ -229,27 +282,27 @@ public class SearchActivity extends AppCompatActivity {
     public void terapkanOnClick() {
         if (mRadioDefault.isChecked()) {
             //mSearchField.setText(searchValue);
-            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING));
+            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING).whereEqualTo("nTipe", kategori));
         }
 
         if (mRadioTime0to1.isChecked()) {
-           // mSearchField.setText(searchValue);
-            showList(mListRef.orderBy("nUploadTime", Query.Direction.ASCENDING));
+            // mSearchField.setText(searchValue);
+            showList(mListRef.orderBy("nUploadTime", Query.Direction.ASCENDING).whereEqualTo("nTipe", kategori));
         }
 
         if (mRadioTime1to0.isChecked()) {
-          //  mSearchField.setText(searchValue);
-            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING));
+            //  mSearchField.setText(searchValue);
+            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING).whereEqualTo("nTipe", kategori));
         }
 
         if (mRadioView0to1.isChecked()) {
-           // mSearchField.setText(searchValue);
-            showList(mListRef.orderBy("nUploadTime", Query.Direction.ASCENDING));
+            // mSearchField.setText(searchValue);
+            showList(mListRef.orderBy("nUploadTime", Query.Direction.ASCENDING).whereEqualTo("nTipe", kategori));
         }
 
         if (mRadioView1to0.isChecked()) {
-           // mSearchField.setText(searchValue);
-            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING));
+            // mSearchField.setText(searchValue);
+            showList(mListRef.orderBy("nUploadTime", Query.Direction.DESCENDING).whereEqualTo("nTipe", kategori));
         }
     }
 

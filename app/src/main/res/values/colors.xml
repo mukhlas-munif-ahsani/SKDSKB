@@ -9,9 +9,13 @@
     <color name="red">#FF5B5B</color>
     <color name="grey">#B8CCDC</color>
     <color name="searchBG">#58BEFF</color>
+    <color name="green">#00F56A</color>
 
     <color name="textColor1">#FFFFFF</color>
     <color name="textColor2">#2B2B2B</color>
     <color name="bgBlue">#0E9BF5</color>
     <color name="bgWhite">#FFFFFF</color>
+
+    <color name="transparent">#00555555</color>
+
 </resources>

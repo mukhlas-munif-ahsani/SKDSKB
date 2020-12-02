@@ -28,8 +28,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.munifahsan.skdskb.Adapters.SearchAdapter;
+import com.munifahsan.skdskb.Articel.ArticleActivity;
+import com.munifahsan.skdskb.Ebook.EbookActivity;
 import com.munifahsan.skdskb.Models.MateriListModel;
 import com.munifahsan.skdskb.R;
+import com.munifahsan.skdskb.Tryout.TryoutActivity;
+import com.munifahsan.skdskb.Video.VideoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,6 +84,7 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
     String document_id;
     String kategori;
     String collection;
+    String tipe;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private CollectionReference mListRef = firebaseFirestore.collection("POST");
@@ -102,15 +107,17 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
         document_id = intent.getStringExtra("DOCUMENT_ID");
         kategori = intent.getStringExtra("KATEGORI");
         collection = intent.getStringExtra("COLLECTION");
+        tipe = intent.getStringExtra("TIPE");
 
         mDetailkategoriPres.getData(collection, document_id);
 
-        showMessage(document_id + kategori + collection);
+        //showMessage(document_id + kategori + collection);
 
         bottomSheetFilter();
 //        showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.DESCENDING));
 
-        showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.DESCENDING));
+        showList(mListRef.whereArrayContains("nKategori", kategori).whereEqualTo("nTipe", tipe)
+                .orderBy("nUploadTime", Query.Direction.DESCENDING));
     }
 
     private void bottomSheetFilter() {
@@ -159,6 +166,8 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
                 mRvList.setLayoutManager(mLayoutManager);
                 mRvList.setAdapter(mAdapter);
                 mRvList.setNestedScrollingEnabled(false);
+
+                mAdapter.getFilter().filter(mSearchField.getText().toString());
             }
         });
 
@@ -212,6 +221,50 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
 
             }
         });
+
+        mAdapter.setOnListItemCliked(new SearchAdapter.OnListItemCliked() {
+            @Override
+            public void onItemCliked(String id, int position, String jenis, boolean isPremium) {
+                switch (jenis) {
+                    case "Artikel":
+                        sendToArtikel(id, isPremium);
+                        break;
+                    case "Video":
+                        sendToVideo(id, isPremium);
+                        break;
+                    case "Ebook":
+                        sendToEbook(id, isPremium);
+                        break;
+                    case "Tryout":
+                        sendToTryout(id, isPremium);
+                        break;
+                }
+            }
+        });
+    }
+
+    private void sendToArtikel(String id, boolean isPremium) {
+        Intent intent = new Intent(this, ArticleActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToVideo(String id, boolean isPremium) {
+        Intent intent = new Intent(this, VideoActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToEbook(String id, boolean isPremium) {
+        Intent intent = new Intent(this, EbookActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToTryout(String id, boolean isPremium) {
+        Intent intent = new Intent(this, TryoutActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
     }
 
     @Override
@@ -264,23 +317,28 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
     @OnClick(R.id.button_filter_terapkan)
     public void terapkanOnClick() {
         if (mRadioDefault.isChecked()) {
-            showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.DESCENDING));
+            showList(mListRef.whereArrayContains("nKategori", kategori)
+                    .whereEqualTo("nTipe", tipe).orderBy("nUploadTime", Query.Direction.DESCENDING));
         }
 
         if (mRadioTime0to1.isChecked()) {
-            showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.ASCENDING));
+            showList(mListRef.whereArrayContains("nKategori", kategori)
+                    .whereEqualTo("nTipe", tipe).orderBy("nUploadTime", Query.Direction.ASCENDING));
         }
 
         if (mRadioTime1to0.isChecked()) {
-            showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.DESCENDING));
+            showList(mListRef.whereArrayContains("nKategori", kategori)
+                    .whereEqualTo("nTipe", tipe).orderBy("nUploadTime", Query.Direction.DESCENDING));
         }
 
         if (mRadioView0to1.isChecked()) {
-            showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.ASCENDING));
+            showList(mListRef.whereArrayContains("nKategori", kategori)
+                    .whereEqualTo("nTipe", tipe).orderBy("nUploadTime", Query.Direction.ASCENDING));
         }
 
         if (mRadioView1to0.isChecked()) {
-            showList(mListRef.whereArrayContains("nKategori", kategori).orderBy("nUploadTime", Query.Direction.DESCENDING));
+            showList(mListRef.whereArrayContains("nKategori", kategori)
+                    .whereEqualTo("nTipe", tipe).orderBy("nUploadTime", Query.Direction.DESCENDING));
         }
     }
 
@@ -295,7 +353,8 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
         mImage.setVisibility(View.VISIBLE);
         Glide.with(this)
                 .load(image)
-                .fitCenter()
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
                 .into(mImage);
     }
 

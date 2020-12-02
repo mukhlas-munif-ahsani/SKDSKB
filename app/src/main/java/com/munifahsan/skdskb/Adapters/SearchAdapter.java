@@ -51,9 +51,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         holder.id = mModelList.get(position).getId();
+        holder.jenis = mModelList.get(position).getnJenis();
+        holder.isPremium = mModelList.get(position).isPremium();
+
         Glide.with(holder.itemView)
                 .load(mModelList.get(position).getnThumbnailImageUrl())
-                .fitCenter()
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
                 .into(holder.mImage);
         holder.mTitle.setText(mModelList.get(position).getnTitle());
         holder.mJenis.setText(mModelList.get(position).getnJenis());
@@ -100,6 +104,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         ConstraintLayout mItem;
 
         String id;
+        String jenis;
+        boolean isPremium;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -112,7 +118,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            onListItemCliked.onItemCliked(id, position);
+            onListItemCliked.onItemCliked(id, position, jenis, isPremium);
         }
 
     }
@@ -164,6 +170,6 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.Holder> im
     }
 
     public interface OnListItemCliked {
-        void onItemCliked(String id, int position);
+        void onItemCliked(String id, int position, String jenis, boolean isPremium);
     }
 }

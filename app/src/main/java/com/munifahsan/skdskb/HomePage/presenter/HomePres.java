@@ -53,6 +53,7 @@ public class HomePres implements HomePresInt {
     private void onGetNamaImageSuccess(String nama, String imageUrl) {
         mHomeVIew.setmNama(nama);
         mHomeVIew.setmPhoto(imageUrl);
+        //mHomeVIew.showMessage(nama);
     }
 
     private void onError(String error) {
@@ -69,8 +70,8 @@ public class HomePres implements HomePresInt {
     public void getData() {
         mHomeVIew.hideTalker();
         mHomeVIew.hideQuote();
-        mHomeVIew.hideNama();
-        mHomeVIew.hidePhoto();
+//        mHomeVIew.hideNama();
+//        mHomeVIew.hidePhoto();
         mHomeVIew.hideGreeting();
         mHomeRepo.getData();
     }
@@ -79,7 +80,7 @@ public class HomePres implements HomePresInt {
     public void getUserData(String id) {
         if (id != null) {
             mHomeRepo.getUserData(id);
-            //mHomeVIew.showMessage("not null");
+            mHomeVIew.showMessage("not null");
         } else {
             mHomeRepo.getFakeNamaProfile();
             //mHomeVIew.showMessage("null");

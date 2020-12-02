@@ -297,7 +297,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:alpha="0.9"
-                            android:text="Pilihan Editor"
+                            android:text="Daftar Tryout"
                             android:textColor="@color/textColor2"
                             android:textSize="14sp" />
 
@@ -308,6 +308,7 @@
                             android:layout_alignParentEnd="true"
                             android:layout_alignParentBottom="true"
                             android:alpha="0.6"
+                            android:visibility="invisible"
                             android:text="Lihat Semua"
                             android:textColor="@color/textColor2"
                             android:textSize="12sp" />

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".AddKategori.AddKategoriFragment">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_error"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
+        android:visibility="gone"
+        app:cardElevation="5dp">
+
+        <TextView
+            android:id="@+id/textView_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="8dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_success"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:visibility="gone"
+        app:cardElevation="5dp">
+
+        <TextView
+            android:id="@+id/textView_success"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start|center_vertical"
+            android:layout_margin="8dp"
+            android:text=""
+            android:textColor="@color/textColor2"
+            android:textSize="14sp" />
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_progress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/white"
+        android:visibility="gone"
+        app:cardElevation="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textView_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start|center_vertical"
+                android:layout_margin="8dp"
+                android:text="Uploading..."
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginEnd="4dp"
+                android:visibility="visible" />
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="@dimen/page_margin"
+                android:text="Pilih Halaman"
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="12dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button_home"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Home"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/button_informasi"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Informasi"
+                    android:textSize="12sp" />
+
+                <Button
+                    android:id="@+id/button_tryout"
+                    android:layout_width="0dp"
+                    android:layout_height="60dp"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:backgroundTint="@color/colorPrimary"
+                    android:text="Tryout"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:text="Masukan Judul"
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="22dp"
+                android:background="@drawable/text_border"
+                android:gravity="top|start"
+                android:hint="Text"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="8"
+                android:minLines="3"
+                android:padding="6dp"
+                android:scrollHorizontally="false"
+                android:textSize="14sp"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:text="Ukuruan font Judul"
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_font"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="22dp"
+                android:background="@drawable/text_border"
+                android:gravity="top|start"
+                android:hint="Ukuran font"
+                android:inputType="number|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="8"
+                android:minLines="3"
+                android:padding="6dp"
+                android:scrollHorizontally="false"
+                android:textSize="14sp"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:text="Masukan Kategori"
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_kategori"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="22dp"
+                android:background="@drawable/text_border"
+                android:gravity="top|start"
+                android:hint="Text"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="8"
+                android:minLines="3"
+                android:padding="6dp"
+                android:scrollHorizontally="false"
+                android:textSize="14sp"
+                tools:ignore="Autofill" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="8dp"
+                android:text="Masukan Deskripsi"
+                android:textColor="@color/textColor2"
+                android:textSize="14sp" />
+
+            <EditText
+                android:id="@+id/editText_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="22dp"
+                android:background="@drawable/text_border"
+                android:gravity="top|start"
+                android:hint="Text"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="2000"
+                android:maxLines="8"
+                android:minLines="3"
+                android:padding="6dp"
+                android:scrollHorizontally="false"
+                android:textSize="14sp"
+                tools:ignore="Autofill" />
+
+            <!--        image header-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="14dp"
+                    android:text="Gambar Thumbnail"
+                    android:textColor="@color/textColor2"
+                    android:textSize="14sp" />
+
+                <EditText
+                    android:id="@+id/editText_imageHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="22dp"
+                    android:background="@drawable/text_border"
+                    android:gravity="top|start"
+                    android:hint="Text / Link gambar"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:maxLength="2000"
+                    android:maxLines="5"
+                    android:minLines="3"
+                    android:padding="6dp"
+                    android:scrollHorizontally="false"
+                    android:textSize="14sp"
+                    tools:ignore="Autofill" />
+
+                <ImageView
+                    android:id="@+id/imageView_imageHeader"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="22dp"
+                    android:src="@drawable/image_placeholder" />
+
+                <Button
+                    android:id="@+id/button_reset_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="22dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="22dp"
+                    android:layout_marginBottom="4dp"
+                    android:text="RESET" />
+            </LinearLayout>
+
+
+            <Button
+                android:id="@+id/button_upload"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginStart="@dimen/page_margin"
+                android:layout_marginTop="@dimen/page_margin"
+                android:layout_marginEnd="@dimen/page_margin"
+                android:layout_marginBottom="@dimen/page_margin"
+                android:backgroundTint="@color/colorPrimary"
+                android:text="UNGGAH" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</LinearLayout>

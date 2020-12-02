@@ -24,6 +24,7 @@
         <ImageView
             android:id="@+id/imageView_image_itemMateri"
             android:layout_width="match_parent"
+            android:scaleType="centerCrop"
             android:layout_height="match_parent" />
     </androidx.cardview.widget.CardView>
 

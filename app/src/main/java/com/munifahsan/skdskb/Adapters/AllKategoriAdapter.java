@@ -41,7 +41,8 @@ public class AllKategoriAdapter extends FirestoreRecyclerAdapter<KategoriModel, 
     protected void onBindViewHolder(@NonNull AllKategoriAdapter.Holder holder, int position, @NonNull KategoriModel model) {
         Glide.with(holder.itemView)
                 .load(model.getnImageUrl())
-                .fitCenter()
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
                 .into(holder.mImage);
         holder.mTitle.setText(model.getnTitle());
         holder.mTitle.setTextSize(model.getnFont());

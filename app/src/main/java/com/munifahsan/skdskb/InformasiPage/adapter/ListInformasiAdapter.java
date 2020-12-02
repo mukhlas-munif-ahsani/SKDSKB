@@ -14,9 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.munifahsan.skdskb.HomePage.adapter.ListOneAdapter;
-import com.munifahsan.skdskb.HomePage.model.MateriModel;
-import com.munifahsan.skdskb.InformasiPage.InformasiEvent;
 import com.munifahsan.skdskb.InformasiPage.model.InformasiModel;
 import com.munifahsan.skdskb.R;
 
@@ -48,9 +45,13 @@ public class ListInformasiAdapter extends FirestoreRecyclerAdapter<InformasiMode
     @Override
     protected void onBindViewHolder(@NonNull Holder holder, int position, @NonNull InformasiModel model) {
         holder.id = model.getId();
+        holder.jenis = model.getnJenis();
+        holder.isPremium = model.isPremium();
+
         Glide.with(holder.itemView)
                 .load(model.getnThumbnailImageUrl())
-                .fitCenter()
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
                 .into(holder.mImage);
         holder.mTitle.setText(model.getnTitle());
         holder.mJenis.setText(model.getnJenis());
@@ -95,6 +96,8 @@ public class ListInformasiAdapter extends FirestoreRecyclerAdapter<InformasiMode
         ConstraintLayout mItem;
 
         String id;
+        boolean isPremium;
+        String jenis;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -106,7 +109,7 @@ public class ListInformasiAdapter extends FirestoreRecyclerAdapter<InformasiMode
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            onItemClickListener.onItemClick(id, position);
+            onItemClickListener.onItemClick(id, position,  jenis, isPremium);
         }
     }
 
@@ -121,6 +124,6 @@ public class ListInformasiAdapter extends FirestoreRecyclerAdapter<InformasiMode
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String id, int position);
+        void onItemClick(String id, int position , String jenis, boolean isPremium);
     }
 }

@@ -20,7 +20,7 @@ public class DetailKategoriRepository implements DetailKategoriContract.Reposito
 
     @Override
     public void getData(String collection, String id){
-        mPageRef = firebaseFirestore.collection(collection).document(id);
+        mPageRef = firebaseFirestore.collection("KATEGORI").document(id);
         mPageRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {

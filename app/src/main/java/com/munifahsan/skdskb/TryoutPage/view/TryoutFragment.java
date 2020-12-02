@@ -30,17 +30,21 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.munifahsan.skdskb.Articel.ArticleActivity;
 import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
+import com.munifahsan.skdskb.Ebook.EbookActivity;
 import com.munifahsan.skdskb.Search.SearchActivity;
 import com.munifahsan.skdskb.SpacesItemDecoration;
 import com.munifahsan.skdskb.Models.KategoriModel;
 import com.munifahsan.skdskb.Adapters.AllKategoriAdapter;
 import com.munifahsan.skdskb.Adapters.KategoriAdapter;
+import com.munifahsan.skdskb.Tryout.TryoutActivity;
 import com.munifahsan.skdskb.TryoutPage.adapter.ListTryoutAdapter;
 import com.munifahsan.skdskb.TryoutPage.model.TryoutModel;
 import com.munifahsan.skdskb.TryoutPage.presenter.TryoutPresInt;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.TryoutPage.presenter.TryoutPres;
+import com.munifahsan.skdskb.Video.VideoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,7 +87,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
 
     TryoutPresInt mTryoutPres;
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference mKategoriRef = firebaseFirestore.collection("KATEGORI_TRYOUT");
+    private CollectionReference mKategoriRef = firebaseFirestore.collection("KATEGORI");
     private CollectionReference mListRef = firebaseFirestore.collection("POST");
     FirebaseUser mCurrentUser;
     Query query;
@@ -160,7 +164,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
         mKategoriMateri.setVisibility(View.INVISIBLE);
         mShimmerKategori.setVisibility(View.VISIBLE);
 
-        query = mKategoriRef;
+        query = mKategoriRef.whereEqualTo("nHalaman", "TRYOUT");;
         FirestoreRecyclerOptions<KategoriModel> options = new FirestoreRecyclerOptions.Builder<KategoriModel>()
                 .setQuery(query, KategoriModel.class)
                 .build();
@@ -193,6 +197,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
                 intent.putExtra("DOCUMENT_ID", id);
                 intent.putExtra("KATEGORI", kategori);
                 intent.putExtra("COLLECTION", collection);
+                intent.putExtra("TIPE", "tryout");
 
                 startActivity(intent);
             }
@@ -206,7 +211,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
 //        mKategoriContent.setVisibility(View.GONE);
 //        mShimerKategori.setVisibility(View.VISIBLE);
 
-        query = mKategoriRef;
+        query = mKategoriRef.whereEqualTo("nHalaman", "TRYOUT");;
         FirestoreRecyclerOptions<KategoriModel> options = new FirestoreRecyclerOptions.Builder<KategoriModel>()
                 .setQuery(query, KategoriModel.class)
                 .build();
@@ -239,6 +244,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
                 intent.putExtra("DOCUMENT_ID", id);
                 intent.putExtra("KATEGORI", kategori);
                 intent.putExtra("COLLECTION", collection);
+                intent.putExtra("TIPE", "tryout");
 
                 startActivity(intent);
             }
@@ -286,10 +292,50 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
 
         mListTryoutAdapter.setOnItemClickListener(new ListTryoutAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String jenis, boolean isPremium) {
+//                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+//                intent.putExtra("DOCUMENT_ID", id);
+//                startActivity(intent);
+                switch (jenis) {
+                    case "Artikel":
+                        sendToArtikel(id, isPremium);
+                        break;
+                    case "Video":
+                        sendToVideo(id, isPremium);
+                        break;
+                    case "Ebook":
+                        sendToEbook(id, isPremium);
+                        break;
+                    case "Tryout":
+                        sendToTryout(id, isPremium);
+                        break;
+                }
             }
         });
+    }
+
+    private void sendToArtikel(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), ArticleActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToVideo(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), VideoActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToEbook(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), EbookActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToTryout(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), TryoutActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
     }
 
     @Override
@@ -331,6 +377,7 @@ public class TryoutFragment extends Fragment implements TryoutViewInt {
         if (!value.isEmpty()) {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             intent.putExtra("SEARCH_VALUE", value);
+            intent.putExtra("KATEGORI", "tryout");
             startActivity(intent);
         } else {
             showMessage("kosong bro");

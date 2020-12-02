@@ -33,17 +33,23 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.munifahsan.skdskb.Adapters.KategoriAdapter;
+import com.munifahsan.skdskb.Articel.ArticleActivity;
 import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
 import com.munifahsan.skdskb.Adapters.AllKategoriAdapter;
-import com.munifahsan.skdskb.HomePage.adapter.ListOneAdapter;
+import com.munifahsan.skdskb.Adapters.ListOneAdapter;
+import com.munifahsan.skdskb.Ebook.EbookActivity;
 import com.munifahsan.skdskb.HomePage.adapter.ListTwoAdapter;
+import com.munifahsan.skdskb.MainAdminActivity;
 import com.munifahsan.skdskb.Models.KategoriModel;
 import com.munifahsan.skdskb.HomePage.model.MateriModel;
 import com.munifahsan.skdskb.HomePage.presenter.HomePres;
 import com.munifahsan.skdskb.HomePage.presenter.HomePresInt;
+import com.munifahsan.skdskb.NotifPage.NotifActivity;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.Search.SearchActivity;
 import com.munifahsan.skdskb.SpacesItemDecoration;
+import com.munifahsan.skdskb.Tryout.TryoutActivity;
+import com.munifahsan.skdskb.Video.VideoActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -110,7 +116,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     HomePresInt mHomePres;
 
     private FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private CollectionReference mKategoriRef = firebaseFirestore.collection("KATEGORI_MATERI");
+    private CollectionReference mKategoriRef = firebaseFirestore.collection("KATEGORI");
     private CollectionReference mListRef = firebaseFirestore.collection("POST");
     private KategoriAdapter mKategoriAdapter;
     private AllKategoriAdapter mAllKategoriAdapter;
@@ -152,11 +158,17 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         /*
         mengambil data nama dan foto user
          */
+        hideNama();
+        hidePhoto();
         if (mCurrentUser != null) {
-            mCurrent_id = mAuth.getCurrentUser().getUid();
-            mHomePres.getUserData(mCurrent_id);
+//            mCurrent_id = mAuth.getCurrentUser().getUid();
+            setmNama(mAuth.getCurrentUser().getDisplayName());
+            setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
+//            showMessage(mAuth.getCurrentUser().getDisplayName());
+//            mHomePres.getUserData(mCurrent_id);
         } else {
             mHomePres.getUserData(null);
+            showMessage("kosong");
         }
 
         /*
@@ -213,7 +225,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         mKategoriMateritxt.setVisibility(View.INVISIBLE);
         mShimerKategori.setVisibility(View.VISIBLE);
 
-        query = mKategoriRef;
+        query = mKategoriRef.whereEqualTo("nHalaman", "MATERI");
         FirestoreRecyclerOptions<KategoriModel> options = new FirestoreRecyclerOptions.Builder<KategoriModel>()
                 .setQuery(query, KategoriModel.class)
                 .build();
@@ -246,6 +258,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 intent.putExtra("DOCUMENT_ID", id);
                 intent.putExtra("KATEGORI", kategori);
                 intent.putExtra("COLLECTION", collection);
+                intent.putExtra("TIPE", "materi");
 
                 startActivity(intent);
                 showMessage("clicked");
@@ -260,7 +273,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 //        mKategoriContent.setVisibility(View.GONE);
 //        mShimerKategori.setVisibility(View.VISIBLE);
 
-        query = mKategoriRef;
+        query = mKategoriRef.whereEqualTo("nHalaman", "MATERI");;
         FirestoreRecyclerOptions<KategoriModel> options = new FirestoreRecyclerOptions.Builder<KategoriModel>()
                 .setQuery(query, KategoriModel.class)
                 .build();
@@ -293,6 +306,8 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 intent.putExtra("DOCUMENT_ID", id);
                 intent.putExtra("KATEGORI", kategori);
                 intent.putExtra("COLLECTION", collection);
+                intent.putExtra("TIPE", "materi");
+
 
                 startActivity(intent);
             }
@@ -339,8 +354,26 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 
         mListOneAdapter.setOnItemClickListener(new ListOneAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String jenis, boolean isPremium) {
+//                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+//                intent.putExtra("DOCUMENT_ID", id);
+//                startActivity(intent);
+//                showMessage("clicked");
+
+                switch (jenis) {
+                    case "Artikel":
+                        sendToArtikel(id, isPremium);
+                        break;
+                    case "Video":
+                        sendToVideo(id, isPremium);
+                        break;
+                    case "Ebook":
+                        sendToEbook(id, isPremium);
+                        break;
+                    case "Tryout":
+                        sendToTryout(id, isPremium);
+                        break;
+                }
             }
         });
     }
@@ -384,10 +417,51 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 
         mListTwoAdapter.setOnItemClickListener(new ListTwoAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(String id, int position) {
-                showMessage("clicked");
+            public void onItemClick(String id, int position, String jenis, boolean isPremium) {
+//                Intent intent = new Intent(getActivity(), VideoActivity.class);
+//                intent.putExtra("DOCUMENT_ID", id);
+//                startActivity(intent);
+//                showMessage("clicked");
+                switch (jenis) {
+                    case "Artikel":
+                        sendToArtikel(id, isPremium);
+                        break;
+                    case "Video":
+                        sendToVideo(id, isPremium);
+                        break;
+                    case "Ebook":
+                        sendToEbook(id, isPremium);
+                        break;
+                    case "Tryout":
+                        sendToTryout(id, isPremium);
+                        break;
+                }
             }
         });
+    }
+
+    private void sendToArtikel(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), ArticleActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToVideo(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), VideoActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToEbook(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), EbookActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
+    }
+
+    private void sendToTryout(String id, boolean isPremium) {
+        Intent intent = new Intent(getActivity(), TryoutActivity.class);
+        intent.putExtra("DOCUMENT_ID", id);
+        startActivity(intent);
     }
 
     @Override
@@ -409,9 +483,11 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         mListTwoAdapter.stopListening();
     }
 
-    @OnClick(R.id.imageView_notif_home)
+    @OnClick(R.id.relative_notif_home)
     public void onNotifClick() {
-        showMessage("Notif page");
+        Intent intent = new Intent(getActivity(), NotifActivity.class);
+        startActivity(intent);
+//        showMessage("Notif page");
     }
 
     @OnClick(R.id.cardView_allKateoriMateri_home)
@@ -435,6 +511,9 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         if (!value.isEmpty()) {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             intent.putExtra("SEARCH_VALUE", value);
+            intent.putExtra("KATEGORI", "materi");
+           // intent.putExtra("TIPE", "materi");
+
             startActivity(intent);
         } else {
             showMessage("kosong bro");

@@ -39,9 +39,13 @@ public class ListTwoAdapter extends FirestoreRecyclerAdapter<MateriModel, ListTw
     @Override
     protected void onBindViewHolder(@NonNull ListTwoAdapter.Holder holder, int position, @NonNull MateriModel model) {
         holder.id = model.getId();
+        holder.jenis = model.getnJenis();
+        holder.isPremium = model.isPremium();
+
         Glide.with(holder.itemView)
                 .load(model.getnThumbnailImageUrl())
-                .fitCenter()
+                .centerCrop()
+                .placeholder(R.drawable.image_placeholder)
                 .into(holder.mImage);
         holder.mTitle.setText(model.getnTitle());
         holder.mJenis.setText(model.getnJenis());
@@ -86,6 +90,8 @@ public class ListTwoAdapter extends FirestoreRecyclerAdapter<MateriModel, ListTw
         ConstraintLayout mItem;
 
         String id;
+        boolean isPremium;
+        String jenis;
 
         public Holder(@NonNull View itemView) {
             super(itemView);
@@ -97,7 +103,7 @@ public class ListTwoAdapter extends FirestoreRecyclerAdapter<MateriModel, ListTw
         @Override
         public void onClick(View view) {
             int position = getAdapterPosition();
-            onItemClickListener.onItemClick(id, position);
+            onItemClickListener.onItemClick(id, position,  jenis, isPremium);
         }
     }
 
@@ -112,6 +118,6 @@ public class ListTwoAdapter extends FirestoreRecyclerAdapter<MateriModel, ListTw
     }
 
     public interface OnItemClickListener {
-        void onItemClick(String id, int position);
+        void onItemClick(String id, int position,  String jenis, boolean isPremium);
     }
 }

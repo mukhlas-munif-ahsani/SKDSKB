@@ -4,6 +4,7 @@
     android:layout_width="91dp"
     android:layout_marginStart="6dp"
     android:id="@+id/itemKategori_lay"
+    android:background="@drawable/custom_ripple"
     android:layout_marginEnd="6dp"
     android:layout_height="wrap_content">
 
@@ -24,6 +25,7 @@
         <ImageView
             android:id="@+id/imageView_itemKategori"
             android:layout_width="match_parent"
+            android:scaleType="centerCrop"
             android:layout_height="match_parent" />
 
     </androidx.cardview.widget.CardView>
