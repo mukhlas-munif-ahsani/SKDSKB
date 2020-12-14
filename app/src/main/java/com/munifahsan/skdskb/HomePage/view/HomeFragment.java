@@ -29,6 +29,7 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -162,13 +163,21 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         hidePhoto();
         if (mCurrentUser != null) {
 //            mCurrent_id = mAuth.getCurrentUser().getUid();
-            setmNama(mAuth.getCurrentUser().getDisplayName());
-            setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
-//            showMessage(mAuth.getCurrentUser().getDisplayName());
-//            mHomePres.getUserData(mCurrent_id);
+            firebaseFirestore.collection("USERS").document(mCurrentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.getResult().exists()){
+                        setmNama(mAuth.getCurrentUser().getDisplayName());
+                        setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
+                    } else {
+                        mHomePres.getUserData(null);
+                    }
+                }
+            });
+
         } else {
             mHomePres.getUserData(null);
-            showMessage("kosong");
+            //showMessage("kosong");
         }
 
         /*

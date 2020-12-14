@@ -779,7 +779,7 @@ public class AddArtikelFragment extends Fragment implements AddArtikelContract.V
         if (requestCode == PICK_THUMBNAIL_IMAGE_REQUEST && resultCode == RESULT_OK
                 && data != null && data.getData() != null) {
             mImageThumbnailUri = data.getData();
-            mThumbnail.setVisibility(View.GONE);
+            mEdtThumbnail.setVisibility(View.GONE);
             //hideTextPhoto();
             Glide.with(this).load(mImageThumbnailUri).into(mThumbnail);
         }
@@ -1300,6 +1300,33 @@ public class AddArtikelFragment extends Fragment implements AddArtikelContract.V
 //        Log.d("par1Uri", mImagePar1Uri.toString());
     }
 
+    @Override
+    public void resetAll(){
+        home();
+        listDipilih.clear();
+        arrayList.clear();
+        mEdtTitle.setText("");
+        imageThumbnailReset();
+        imageHeaderReset();
+        par1Reset();
+        par2Reset();
+        par3Reset();
+        par4Reset();
+        par5Reset();
+        par6Reset();
+        par7Reset();
+        par8Reset();
+        par9Reset();
+        par10Reset();
+        par11Reset();
+        par12Reset();
+        par13Reset();
+        par14Reset();
+        par15Reset();
+        mPremium.setChecked(false);
+        mPilihanEditor.setChecked(false);
+    }
+
 //    public void upImgThumbnail(Uri uri) {
 //        String fileName = "nasdhadsfads";
 //        storageRef.child(fileName).putFile(uri)
@@ -1363,6 +1390,7 @@ public class AddArtikelFragment extends Fragment implements AddArtikelContract.V
         mTextSuccess.setText(success);
 
         mUpload.setEnabled(true);
+        resetAll();
 
         handler.postDelayed(new Runnable() {
             @Override

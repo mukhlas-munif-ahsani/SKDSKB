@@ -205,7 +205,7 @@
                 android:maxLines="8"
                 android:minLines="3"
                 android:padding="6dp"
-                android:scrollHorizontally="false"
+                android:scrollHorizontally="true"
                 android:textSize="14sp"
                 tools:ignore="Autofill" />
 
@@ -240,7 +240,7 @@
                     android:maxLines="10"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -294,7 +294,7 @@
                     android:maxLines="10"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -345,10 +345,9 @@
                     android:hint="Text"
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="10"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -398,10 +397,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -451,10 +449,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -504,10 +501,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -557,10 +553,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -610,10 +605,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -663,10 +657,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -716,10 +709,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -769,10 +761,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -825,7 +816,7 @@
                     android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -875,10 +866,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -923,16 +913,14 @@
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginEnd="22dp"
-
                     android:background="@drawable/text_border"
                     android:gravity="top|start"
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -982,10 +970,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -1035,10 +1022,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -1088,10 +1074,9 @@
                     android:hint="Text..."
                     android:inputType="textCapSentences|textMultiLine"
                     android:maxLength="2000"
-                    android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 
@@ -1122,7 +1107,6 @@
                 android:layout_marginStart="22dp"
                 android:layout_marginTop="@dimen/page_margin"
                 android:layout_marginEnd="22dp"
-                android:checked="true"
                 android:text="Premium" />
 
             <CheckBox

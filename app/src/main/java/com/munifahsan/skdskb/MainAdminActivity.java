@@ -33,6 +33,7 @@ import com.munifahsan.skdskb.AdminPage.AdminPageFragment;
 import com.munifahsan.skdskb.BoomarkPage.BookmarkFragment;
 import com.munifahsan.skdskb.HomePage.view.HomeFragment;
 import com.munifahsan.skdskb.InformasiPage.view.InformasiFragment;
+import com.munifahsan.skdskb.PageContent.ContentPageFragment;
 import com.munifahsan.skdskb.SettingPage.SettingFragment;
 import com.munifahsan.skdskb.TryoutPage.view.TryoutFragment;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
@@ -73,6 +74,7 @@ public class MainAdminActivity extends AppCompatActivity {
                 .add("TAMBAH EBOOK", AddEbookFragment.class)
                 .add("TAMBAH TRYOUT", AddTryoutFragment.class)
                 .add("TAMBAH KATEGORI", AddKategoriFragment.class)
+                .add("EDIT PAGE", ContentPageFragment.class)
                 .create()
         );
 

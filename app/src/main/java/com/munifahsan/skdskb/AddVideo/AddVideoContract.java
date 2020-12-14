@@ -7,6 +7,8 @@ import java.util.List;
 public interface AddVideoContract {
     interface View{
 
+        void resetAll();
+
         void showError(String error);
 
         void hideError();

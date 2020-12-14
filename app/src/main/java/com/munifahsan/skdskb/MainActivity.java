@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
 
         ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this)
-                .addTestDeviceHashedId("E46086AE0C9A7854A391939BB1A0887A")
+//                .addTestDeviceHashedId("E46086AE0C9A7854A391939BB1A0887A")
                 .setDebugGeography(ConsentDebugSettings
                         .DebugGeography
                         .DEBUG_GEOGRAPHY_NOT_EEA)
@@ -81,7 +81,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 .setConsentDebugSettings(debugSettings)
                 .build();
 
-        RequestConfiguration configuration = new RequestConfiguration.Builder().setTestDeviceIds(Arrays.asList("E46086AE0C9A7854A391939BB1A0887A")).build();
+        RequestConfiguration configuration = new RequestConfiguration.Builder()
+//                .setTestDeviceIds(Arrays.asList("E46086AE0C9A7854A391939BB1A0887A"))
+                .build();
         MobileAds.setRequestConfiguration(configuration);
 
         // Set tag for under age of consent. Here false means users are not under age

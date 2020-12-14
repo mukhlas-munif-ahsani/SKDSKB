@@ -162,7 +162,7 @@
                 android:maxLines="8"
                 android:minLines="3"
                 android:padding="6dp"
-                android:scrollHorizontally="false"
+                android:scrollHorizontally="true"
                 android:textSize="14sp"
                 tools:ignore="Autofill" />
 
@@ -190,7 +190,7 @@
                 android:maxLines="8"
                 android:minLines="3"
                 android:padding="6dp"
-                android:scrollHorizontally="false"
+                android:scrollHorizontally="true"
                 android:textSize="14sp"
                 tools:ignore="Autofill" />
 
@@ -218,7 +218,7 @@
                 android:maxLines="8"
                 android:minLines="3"
                 android:padding="6dp"
-                android:scrollHorizontally="false"
+                android:scrollHorizontally="true"
                 android:textSize="14sp"
                 tools:ignore="Autofill" />
 
@@ -243,10 +243,9 @@
                 android:hint="Text"
                 android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="2000"
-                android:maxLines="8"
                 android:minLines="3"
                 android:padding="6dp"
-                android:scrollHorizontally="false"
+                android:scrollHorizontally="true"
                 android:textSize="14sp"
                 tools:ignore="Autofill" />
 
@@ -280,7 +279,7 @@
                     android:maxLines="5"
                     android:minLines="3"
                     android:padding="6dp"
-                    android:scrollHorizontally="false"
+                    android:scrollHorizontally="true"
                     android:textSize="14sp"
                     tools:ignore="Autofill" />
 

@@ -56,7 +56,7 @@ import butterknife.OnClick;
 
 import static android.app.Activity.RESULT_OK;
 
-public class AddVideoFragment extends Fragment implements AddVideoContract.View{
+public class AddVideoFragment extends Fragment implements AddVideoContract.View {
 
     AddVideoContract.Presenter mPres;
 
@@ -99,7 +99,6 @@ public class AddVideoFragment extends Fragment implements AddVideoContract.View{
 
     @BindView(R.id.editText_youtubeId)
     EditText mEdtHeaderYoutubeId;
-
 
 
     @BindView(R.id.editText_par1)
@@ -1209,7 +1208,7 @@ public class AddVideoFragment extends Fragment implements AddVideoContract.View{
 
                                     mPres.title(mEdtTitle.getText().toString());
                                     mPres.kategori(listDipilih);
-                                    mPres.jenisImage("https://firebasestorage.googleapis.com/v0/b/skdskb-8a08b.appspot.com/o/ICONS%2Fic_artikel.png?alt=media&token=9afb8d13-355a-4a17-a7dd-e71aab6e97b9");
+                                    mPres.jenisImage("https://firebasestorage.googleapis.com/v0/b/skdskb-8a08b.appspot.com/o/ICONS%2Fic_video.png?alt=media&token=cd2b5c0d-97cc-46c6-bba5-f0b3ead5863f");
                                     mPres.jenis("Video");
                                     mPres.tipe(halaman);
                                     mPres.premium(mPremium.isChecked());
@@ -1270,6 +1269,33 @@ public class AddVideoFragment extends Fragment implements AddVideoContract.View{
     }
 
     @Override
+    public void resetAll() {
+        home();
+        listDipilih.clear();
+        arrayList.clear();
+        mEdtTitle.setText("");
+        imageThumbnailReset();
+        mEdtHeaderYoutubeId.setText("");
+        par1Reset();
+        par2Reset();
+        par3Reset();
+        par4Reset();
+        par5Reset();
+        par6Reset();
+        par7Reset();
+        par8Reset();
+        par9Reset();
+        par10Reset();
+        par11Reset();
+        par12Reset();
+        par13Reset();
+        par14Reset();
+        par15Reset();
+        mPremium.setChecked(false);
+        mPilihanEditor.setChecked(false);
+    }
+
+    @Override
     public void showError(String error) {
         mCardError.setVisibility(View.VISIBLE);
         mCardProgress.setVisibility(View.GONE);
@@ -1303,6 +1329,7 @@ public class AddVideoFragment extends Fragment implements AddVideoContract.View{
         mTextSuccess.setText(success);
 
         mUpload.setEnabled(true);
+        resetAll();
 
         handler.postDelayed(new Runnable() {
             @Override
@@ -1312,7 +1339,7 @@ public class AddVideoFragment extends Fragment implements AddVideoContract.View{
         }, 3000);
     }
 
-    public void shoMessage(String msg){
+    public void shoMessage(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
     }
 

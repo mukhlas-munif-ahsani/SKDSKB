@@ -10,12 +10,14 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -23,6 +25,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class SplashScreenActivity extends AppCompatActivity {
 
+    private static final String TAG = "SPLASH_SCREEN";
     FirebaseUser mCurrentUser;
     String mCurrentId;
     private FirebaseFirestore firebaseFirestore;
@@ -30,6 +33,8 @@ public class SplashScreenActivity extends AppCompatActivity {
     NetworkInfo activeNetwork;
     ConnectivityManager cm;
     Handler handler = new Handler();
+
+    private FirebaseAuth mAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +44,8 @@ public class SplashScreenActivity extends AppCompatActivity {
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
+        // Initialize Firebase Auth
+        mAuth = FirebaseAuth.getInstance();
 
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
@@ -64,12 +71,38 @@ public class SplashScreenActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                navigateToMain();
-            }
-        }, 2000);
+        if (mCurrentUser != null) {
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    navigateToMain();
+                }
+            }, 2000);
+
+        } else {
+            mAuth.signInAnonymously()
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInAnonymously:success");
+                                FirebaseUser user = mAuth.getCurrentUser();
+
+                                navigateToMain();
+
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInAnonymously:failure", task.getException());
+                                //Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+                                showMessage("Authentication failed.");
+                            }
+
+                            // ...
+                        }
+                    });
+        }
+
         // if (isConnected){
 
 
@@ -130,8 +163,6 @@ public class SplashScreenActivity extends AppCompatActivity {
 //                }
 //            }, 2000);
 //        }
-
-
 
 
 //        } else {

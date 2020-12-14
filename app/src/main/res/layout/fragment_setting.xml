@@ -369,6 +369,7 @@
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:focusable="true"
+                    android:visibility="gone"
                     android:foreground="@drawable/custom_ripple"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="0dp">

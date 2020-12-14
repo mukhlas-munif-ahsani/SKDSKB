@@ -93,13 +93,46 @@ public class SettingFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        hideNama();
-        hidePhoto();
+//        hideNama();
+//        hidePhoto();
 
         if (mCurrentUser != null) {
-            setmNama(mAuth.getCurrentUser().getDisplayName());
-            setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
-            mEmail.setText(mAuth.getCurrentUser().getEmail());
+
+            firebaseFirestore.collection("USERS").document(mCurrentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.getResult().exists()){
+                        setmNama(mAuth.getCurrentUser().getDisplayName());
+                        setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
+                        mEmail.setText(mAuth.getCurrentUser().getEmail());
+
+                        //signin
+                        mSignInBtn.setAlpha((float) 0.8);
+                        mSignInBtn.setElevation(0);
+                        mSignInBtn.setClickable(false);
+                        mSignInCheck.setVisibility(View.VISIBLE);
+
+                        //logout
+                        mLogout.setClickable(true);
+                        mLogout.setAlpha((float) 1.0);
+                    } else {
+                        setmNama("Nama");
+                        setEmail("email@gmail.com");
+                        setmPhoto("https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png");
+                       // mHomePres.getUserData(null);
+
+                        //signin
+                        mSignInBtn.setAlpha((float) 1.0);
+                        mSignInBtn.setClickable(true);
+                        mSignInBtn.setElevation(5);
+                        mSignInCheck.setVisibility(View.INVISIBLE);
+
+                        //logout
+                        mLogout.setClickable(false);
+                        mLogout.setAlpha((float) 0.8);
+                    }
+                }
+            });
 
             //signin
             mSignInBtn.setAlpha((float) 0.8);
@@ -139,16 +172,15 @@ public class SettingFragment extends Fragment {
 
                     if (task.isSuccessful()) {
 
-                        String level = task.getResult().getString("nLevel");
+                        if (task.getResult().exists()){
+                            String level = task.getResult().getString("nLevel");
 
-                        if (level.equals("ADMIN")) {
-                            mAdminButton.setVisibility(View.VISIBLE);
-                        } else {
-                            mAdminButton.setVisibility(View.INVISIBLE);
+                            if (level.equals("ADMIN")) {
+                                mAdminButton.setVisibility(View.VISIBLE);
+                            } else {
+                                mAdminButton.setVisibility(View.INVISIBLE);
+                            }
                         }
-
-                    } else {
-
 
                     }
                 }
@@ -203,7 +235,7 @@ public class SettingFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int id) {
                         // jika tombol diklik, maka akan menutup activity ini
                         mAuth.signOut();
-                        navigateToSplash();
+                        //navigateToSplash();
                     }
                 })
                 .setNegativeButton("Tidak", new DialogInterface.OnClickListener() {

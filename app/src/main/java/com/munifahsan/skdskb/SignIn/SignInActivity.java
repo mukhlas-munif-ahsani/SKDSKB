@@ -88,7 +88,7 @@ public class SignInActivity extends AppCompatActivity {
 
     public void doGoogleSignIn(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
+        mAuth.getCurrentUser().linkWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -143,8 +143,8 @@ public class SignInActivity extends AppCompatActivity {
                     // ...
                 }
             } else {
-                Log.w("googleSignUp", "ex");
-                showMessage("Sign In Gagal Silahkan Coba lagi 2");
+                Log.w("googleSignUp", task.getException().getMessage());
+                showMessage("Sign In Gagal Silahkan Coba lagi : " + task.getException().getMessage());
                 finish();
             }
         }
