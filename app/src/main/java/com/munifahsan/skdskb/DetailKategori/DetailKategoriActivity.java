@@ -2,6 +2,7 @@ package com.munifahsan.skdskb.DetailKategori;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -10,6 +11,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -118,6 +121,22 @@ public class DetailKategoriActivity extends AppCompatActivity implements DetailK
 
         showList(mListRef.whereArrayContains("nKategori", kategori).whereEqualTo("nTipe", tipe)
                 .orderBy("nUploadTime", Query.Direction.DESCENDING));
+
+
+        /*
+        Change status bar color
+         */
+        Window window = this.getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bgPageHeader));
+
     }
 
     private void bottomSheetFilter() {

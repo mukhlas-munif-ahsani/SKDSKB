@@ -39,7 +39,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:text="judul aritkelsdjfa sasasljfsa sasasljfsa sasasljfsa "
-        android:textColor="@color/textColor2"
+        android:textColor="@color/txtItemColor"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -68,7 +68,7 @@
             android:layout_height="wrap_content"
             android:alpha="0.5"
             android:text="jenis"
-            android:textColor="@color/textColor2"
+            android:textColor="@color/txtItemColor"
             android:textSize="10sp" />
     </LinearLayout>
 
@@ -81,7 +81,7 @@
         android:layout_marginBottom="4dp"
         android:alpha="0.5"
         android:text="tanggal"
-        android:textColor="@color/textColor2"
+        android:textColor="@color/txtItemColor"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="@+id/cardView3"
         app:layout_constraintEnd_toEndOf="parent" />

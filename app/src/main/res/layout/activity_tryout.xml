@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/bgPageBody"
     android:layout_height="match_parent"
     tools:context=".Tryout.TryoutActivity">
 
@@ -22,7 +23,7 @@
                 android:layout_height="56dp"
                 android:layout_below="@+id/Toolbar"
                 android:layout_marginTop="0dp"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/bgPageHeader"
                 app:layout_scrollFlags="scroll|enterAlways|snap">
 
                 <RelativeLayout
@@ -339,7 +340,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:backgroundTint="@color/white">
+                android:backgroundTint="@color/bgBorderPageMateri">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -375,6 +376,8 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerInParent="true"
+                            app:tint="@color/iconBoarderColor"
+                            android:alpha="0.7"
                             android:src="@drawable/ic_baseline_share" />
                     </RelativeLayout>
 
@@ -391,6 +394,8 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
+                            app:tint="@color/iconBoarderColor"
+                            android:alpha="0.7"
                             android:layout_marginStart="14dp"
                             android:src="@drawable/ic_baseline_remove_red_eye" />
 
@@ -401,6 +406,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
+                            android:textColor="@color/iconBoarderColor"
+                            android:alpha="0.7"
                             android:layout_toEndOf="@+id/imageView_seen"
                             android:text="0"
                             android:textSize="12sp" />
@@ -423,7 +430,7 @@
                             android:layout_marginStart="14dp"
                             android:alpha="0.7"
                             android:src="@drawable/ic_baseline_favorite_border"
-                            app:tint="@color/black" />
+                            app:tint="@color/iconBoarderColor" />
 
                         <TextView
                             android:id="@+id/textView_number_favo"
@@ -432,6 +439,8 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
+                            android:textColor="@color/iconBoarderColor"
+                            android:alpha="0.7"
                             android:layout_toEndOf="@+id/imageView_favo"
                             android:text="0"
                             android:textSize="12sp" />

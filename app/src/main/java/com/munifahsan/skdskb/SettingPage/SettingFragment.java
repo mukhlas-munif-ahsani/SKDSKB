@@ -2,12 +2,14 @@ package com.munifahsan.skdskb.SettingPage;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
@@ -15,6 +17,7 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,10 +26,13 @@ import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.munifahsan.skdskb.DarkMode;
 import com.munifahsan.skdskb.MainAdminActivity;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.SignIn.SignInActivity;
@@ -37,6 +43,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class SettingFragment extends Fragment {
 
@@ -69,6 +77,13 @@ public class SettingFragment extends Fragment {
     @BindView(R.id.logout)
     CardView mLogout;
 
+    @BindView(R.id.cardView_darkMode)
+    CardView mCardDarkMode;
+    @BindView(R.id.textView_darkMode)
+    TextView mTextDarkMode;
+    @BindView(R.id.darkMode)
+    SwitchMaterial mDarkMode;
+
     @BindView(R.id.admin)
     CardView mAdminButton;
 
@@ -79,19 +94,123 @@ public class SettingFragment extends Fragment {
     ConnectivityManager cm;
     Handler handler = new Handler();
 
+    DarkMode darkMode;
+//    SharedPreferences sharedPreferences;
+//    boolean isDarkModeOn;
+//    SharedPreferences.Editor editor;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+//        // Inflate the layout for this fragment
+//        if (!DarkMode.isNightModeEnabled(getActivity())) {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+////            mDarkMode.setChecked(true);
+////            mTextDarkMode.setText("Gelap");
+//        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//            //mDarkMode.setChecked(false);
+////            mTextDarkMode.setText("Terang");
+//        }
+
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
         ButterKnife.bind(this, view);
 
-        mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+        darkMode = new DarkMode();
+
+
+
         firebaseFirestore = FirebaseFirestore.getInstance();
 
         mAuth = FirebaseAuth.getInstance();
         mCurrentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        /*
+        set to dark mode
+         */
+
+        if (AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES){
+            mDarkMode.setChecked(true);
+            mTextDarkMode.setText("Gelap");
+        } else {
+            mDarkMode.setChecked(false);
+            mTextDarkMode.setText("Terang");
+        }
+
+        mDarkMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b) {
+                    // change text of Button
+                    //DarkMode.getInstance().setIsNightModeEnabled(true);
+                    mTextDarkMode.setText("Gelap");
+                } else {
+                    // change text of Button
+                  //  DarkMode.getInstance().setIsNightModeEnabled(false);
+                    mTextDarkMode.setText("Terang");
+                }
+            }
+        });
+
+//        sharedPreferences = this.getActivity().getSharedPreferences(
+//                "sharedPrefs", MODE_PRIVATE);
+//        editor = sharedPreferences.edit();
+//
+//        isDarkModeOn = sharedPreferences.getBoolean("isDarkModeOn", false);
+
+
+
+        mDarkMode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (DarkMode.isNightModeEnabled(getActivity())) {
+
+                    // if dark mode is on it
+                    // will turn it off
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//                    // it will set isDarkModeOn
+//                    // boolean to false
+//                    editor.putBoolean("isDarkModeOn", false);
+//                    editor.apply();
+
+                    DarkMode.setIsNightModeEnabled(getActivity(), false);
+
+                    // change text of Button
+                    mDarkMode.setChecked(false);
+                    mTextDarkMode.setText("Terang");
+
+
+                    Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
+                    startActivity(intent);
+
+                }
+                else {
+
+                    // if dark mode is off
+                    // it will turn it on
+//                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//
+//                    // it will set isDarkModeOn
+//                    // boolean to true
+//                    editor.putBoolean("isDarkModeOn", true);
+//                    editor.apply();
+
+                    DarkMode.setIsNightModeEnabled(getContext(), true);
+
+                    // change text of Button
+                    mDarkMode.setChecked(true);
+                    mTextDarkMode.setText("Gelap");
+
+
+                    Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
+                    startActivity(intent);
+
+
+                }
+                getActivity().finish();
+            }
+        });
 
 //        hideNama();
 //        hidePhoto();
@@ -101,9 +220,9 @@ public class SettingFragment extends Fragment {
             firebaseFirestore.collection("USERS").document(mCurrentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.getResult().exists()){
-                        setmNama(mAuth.getCurrentUser().getDisplayName());
-                        setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
+                    if (task.getResult().exists()) {
+                        setmNama(mAuth.getCurrentUser().getProviderData().get(1).getDisplayName());
+                        setmPhoto(mAuth.getCurrentUser().getProviderData().get(1).getPhotoUrl().toString());
                         mEmail.setText(mAuth.getCurrentUser().getEmail());
 
                         //signin
@@ -119,7 +238,7 @@ public class SettingFragment extends Fragment {
                         setmNama("Nama");
                         setEmail("email@gmail.com");
                         setmPhoto("https://www.searchpng.com/wp-content/uploads/2019/02/Deafult-Profile-Pitcher.png");
-                       // mHomePres.getUserData(null);
+                        // mHomePres.getUserData(null);
 
                         //signin
                         mSignInBtn.setAlpha((float) 1.0);
@@ -172,7 +291,7 @@ public class SettingFragment extends Fragment {
 
                     if (task.isSuccessful()) {
 
-                        if (task.getResult().exists()){
+                        if (task.getResult().exists()) {
                             String level = task.getResult().getString("nLevel");
 
                             if (level.equals("ADMIN")) {
@@ -220,6 +339,52 @@ public class SettingFragment extends Fragment {
     public void adminOnClick() {
         Intent intent = new Intent(getActivity(), MainAdminActivity.class);
         startActivity(intent);
+        getActivity().finish();
+    }
+
+    @OnClick(R.id.cardView_darkMode)
+    public void cardDarkModeClick() {
+        DarkMode.setIsToogleEnabled(getActivity(), true);
+        if (DarkMode.isNightModeEnabled(getActivity())) {
+
+            DarkMode.setIsNightModeEnabled(getActivity(), false);
+
+            // if dark mode is on it
+            // will turn it off
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//            // it will set isDarkModeOn
+//            // boolean to false
+//            editor.putBoolean("isDarkModeOn", false);
+//            editor.apply();
+
+            // change text of Button
+            mDarkMode.setChecked(false);
+            mTextDarkMode.setText("Terang");
+
+
+        }
+        else {
+
+//            // if dark mode is off
+//            // it will turn it on
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//
+//            // it will set isDarkModeOn
+//            // boolean to true
+//            editor.putBoolean("isDarkModeOn", true);
+//            editor.apply();
+
+            DarkMode.setIsNightModeEnabled(getActivity(), true);
+
+            // change text of Button
+            mDarkMode.setChecked(true);
+            mTextDarkMode.setText("Gelap");
+
+        }
+
+        Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     public void showDialogOnLogOutBtnOnClick() {
@@ -277,10 +442,12 @@ public class SettingFragment extends Fragment {
     }
 
     public void setmPhoto(String imageUrl) {
-        Glide.with(this)
-                .load(imageUrl)
-                .centerCrop()
-                .into(mPhoto);
+        if (isAdded()) {
+            Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(mPhoto);
+        }
         mPhoto.setVisibility(View.VISIBLE);
         mShimmerPhoto.setVisibility(View.INVISIBLE);
     }

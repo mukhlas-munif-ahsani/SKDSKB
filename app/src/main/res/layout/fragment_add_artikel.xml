@@ -151,7 +151,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="@color/colorPrimary">
+                android:backgroundTint="@color/bgBlue">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recyclerView_pilihKategori"
@@ -260,6 +260,7 @@
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
             </LinearLayout>
@@ -313,6 +314,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
@@ -366,6 +368,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
@@ -415,6 +418,7 @@
                 <Button
                     android:id="@+id/button_reset_par2"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -471,6 +475,7 @@
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
             </LinearLayout>
@@ -519,6 +524,7 @@
                 <Button
                     android:id="@+id/button_reset_par4"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -574,6 +580,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
@@ -625,6 +632,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
@@ -673,6 +681,7 @@
                     android:src="@drawable/image_placeholder" />
 
                 <Button
+                    android:backgroundTint="@color/bgBlue"
                     android:id="@+id/button_reset_par7"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -727,6 +736,7 @@
                 <Button
                     android:id="@+id/button_reset_par8"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -781,6 +791,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
@@ -834,6 +845,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
@@ -887,6 +899,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
                     android:text="RESET" />
@@ -936,6 +949,7 @@
                 <Button
                     android:id="@+id/button_reset_par12"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -988,6 +1002,7 @@
                 <Button
                     android:id="@+id/button_reset_par13"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -1042,6 +1057,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="22dp"
                     android:layout_marginBottom="4dp"
@@ -1092,6 +1108,7 @@
                 <Button
                     android:id="@+id/button_reset_par15"
                     android:layout_width="match_parent"
+                    android:backgroundTint="@color/bgBlue"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="22dp"
                     android:layout_marginTop="8dp"
@@ -1126,7 +1143,7 @@
                 android:layout_marginEnd="@dimen/page_margin"
                 android:layout_marginBottom="@dimen/page_margin"
                 android:text="UNGGAH"
-                android:backgroundTint="@color/colorPrimary" />
+                android:backgroundTint="@color/bgBlue" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 

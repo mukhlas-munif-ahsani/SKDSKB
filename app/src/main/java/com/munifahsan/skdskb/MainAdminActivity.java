@@ -3,10 +3,14 @@ package com.munifahsan.skdskb;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
@@ -74,13 +78,27 @@ public class MainAdminActivity extends AppCompatActivity {
                 .add("TAMBAH EBOOK", AddEbookFragment.class)
                 .add("TAMBAH TRYOUT", AddTryoutFragment.class)
                 .add("TAMBAH KATEGORI", AddKategoriFragment.class)
-                .add("EDIT PAGE", ContentPageFragment.class)
                 .create()
         );
 
 
         mViewPager.setAdapter(adapter);
         mSmartTabLayout.setViewPager(mViewPager);
+
+        /*
+        Change status bar color
+         */
+        Window window = this.getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bgBlue));
+
 
 //        MobileAds.initialize(this, new OnInitializationCompleteListener() {
 //            @Override
@@ -176,6 +194,14 @@ public class MainAdminActivity extends AppCompatActivity {
 //
 //        mBottomNavigationView.setItemIconTintList(null);
 //        mBottomNavigationView.setOnNavigationItemSelectedListener(this);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent intent = new Intent(this, SplashScreenActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void showMessage(String error) {

@@ -64,7 +64,7 @@ public class SignInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sign_in);
 
         mAuth = FirebaseAuth.getInstance();
-
+        mCurrent_id = mAuth.getCurrentUser().getUid();
 
         //mCurrent_id = mCurrentUser.getUid();
 
@@ -97,18 +97,33 @@ public class SignInActivity extends AppCompatActivity {
 
                             Log.d("googleSignUp", "signInWithCredential:success");
                             //postEvent(RegisterEvent.onSuccess, null);
-                            mCurrent_id = mAuth.getCurrentUser().getUid();
+
                             showMessage("sign in success" + mCurrent_id);
-                            sMail = mAuth.getCurrentUser().getEmail();
-                            sNama = mAuth.getCurrentUser().getDisplayName();
-                            sImageUrl = mAuth.getCurrentUser().getPhotoUrl().toString();
-//
+                            sMail = mAuth.getCurrentUser().getProviderData().get(1).getEmail();
+                            sNama = mAuth.getCurrentUser().getProviderData().get(1).getDisplayName();
+                            sImageUrl = mAuth.getCurrentUser().getProviderData().get(1).getPhotoUrl().toString();
+
                             inputGoogleAndFacebookSignIn();
                         } else {
+
+                            mAuth.signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                                @Override
+                                public void onComplete(@NonNull Task<AuthResult> task) {
+                                    if (task.isSuccessful()){
+
+                                        inputGoogleAndFacebookSignIn();
+
+                                    } else {
+                                        Log.w("googleSignUp", "signInWithCredential:failure", task.getException());
+                                    }
+                                }
+                            });
+
                             // If sign in fails, display a message to the user.
-                            Log.w("googleSignUp", "signInWithCredential:failure", task.getException());
-                            showMessage("SignIn Gagal Silahkan Coba Lagi 1");
-                            finish();
+//                            Log.w("googleSignUp", "signInWithCredential:failure", task.getException());
+//                            showMessage("SignIn Gagal Silahkan Coba Lagi");
+//                            navigateToSplash();
+
 //                            postEvent(RegisterEvent.onError, task.getException().toString());
                         }
 
@@ -154,7 +169,8 @@ public class SignInActivity extends AppCompatActivity {
     public void inputGoogleAndFacebookSignIn() {
         //mCurrentUser = mAuth.getCurrentUser();
 
-        showMessage(mCurrent_id);
+
+        //showMessage(mCurrent_id);
         mCollectionReference.document(mCurrent_id).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -187,7 +203,7 @@ public class SignInActivity extends AppCompatActivity {
                     });
 
                 } else {
-                    //showMessage("ada");
+                    showMessage("lewat");
                     navigateToSplash();
                 }
             }

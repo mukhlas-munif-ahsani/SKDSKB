@@ -39,7 +39,7 @@
         android:maxLines="2"
         android:text="Seleksi Komputasi Dasar"
         android:textAlignment="center"
-        android:textColor="@color/textColor2"
+        android:textColor="@color/txtAllKatColor"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

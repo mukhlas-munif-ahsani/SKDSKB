@@ -167,8 +167,8 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     if (task.getResult().exists()){
-                        setmNama(mAuth.getCurrentUser().getDisplayName());
-                        setmPhoto(mAuth.getCurrentUser().getPhotoUrl().toString());
+                        setmNama(mAuth.getCurrentUser().getProviderData().get(1).getDisplayName());
+                        setmPhoto(mAuth.getCurrentUser().getProviderData().get(1).getPhotoUrl().toString());
                     } else {
                         mHomePres.getUserData(null);
                     }
@@ -572,10 +572,12 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     public void setmPhoto(String photo) {
         mShimmerPhoto.setVisibility(View.INVISIBLE);
         mPhoto.setVisibility(View.VISIBLE);
-        Glide.with(this)
-                .load(photo)
-                .fitCenter()
-                .into(mPhoto);
+        if (isAdded()){
+            Glide.with(this)
+                    .load(photo)
+                    .fitCenter()
+                    .into(mPhoto);
+        }
     }
 
     @Override

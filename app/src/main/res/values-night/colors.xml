@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#0E9BF5</color>
+    <color name="colorPrimaryDark">#FFFFFF</color>
+    <color name="colorAccent">#03DAC5</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#2B2B2B</color>
+    <color name="red">#FF5B5B</color>
+    <color name="grey">#B8CCDC</color>
+    <color name="searchBG">#01233A</color>
+    <color name="green">#00F56A</color>
+
+    <color name="textColor1">#FFFFFF</color>
+    <color name="textColor2">#2B2B2B</color>
+    <color name="bgBlue">#0E9BF5</color>
+    <color name="bgWhite">#FFFFFF</color>
+
+    <color name="bgSplashScreen">#003A60</color>
+    <color name="txtSplashScreen">#FFFFFF</color>
+    <color name="notifBarSplashScreen">#003A60</color>
+
+    <color name="bgPageHeader">#003A60</color>
+    <color name="txtPageHeader">#FFFFFF</color>
+    <color name="bgPageBody">#01233A</color>
+
+    <color name="bgPageSetting">#032841</color>
+    <color name="bgBorderPageMateri">#003A60</color>
+    <color name="iconBoarderColor">#FFFFFF</color>
+
+    <color name="txtItemColor">#FFFFFF</color>
+    <color name="txtAllKatColor">#FFFFFF</color>
+    <color name="txtMateriColor">#FFFFFF</color>
+    <color name="txtNavBarColor">#FFFFFF</color>
+
+
+    <color name="transparent">#00555555</color>
+
+</resources>

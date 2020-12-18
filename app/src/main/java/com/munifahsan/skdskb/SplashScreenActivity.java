@@ -2,6 +2,7 @@ package com.munifahsan.skdskb;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.content.ContextCompat;
 
 import android.content.Context;
@@ -38,6 +39,21 @@ public class SplashScreenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!DarkMode.isToogleEnabled(SplashScreenActivity.this)) {
+            if (DarkMode.isDarkMode(SplashScreenActivity.this)) {
+                DarkMode.setIsNightModeEnabled(SplashScreenActivity.this, true);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                DarkMode.setIsNightModeEnabled(SplashScreenActivity.this, false);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+        } else {
+            if (DarkMode.isNightModeEnabled(SplashScreenActivity.this)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            }
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
@@ -63,8 +79,13 @@ public class SplashScreenActivity extends AppCompatActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
 
         // finally change the color
-        window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.notifBarSplashScreen));
 
+//        if (DarkMode.getInstance().isNightModeEnabled()) {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+//        } else {
+//            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+//        }
     }
 
     @Override

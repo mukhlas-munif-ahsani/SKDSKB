@@ -11,11 +11,13 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:backgroundTint="@color/bgPageBody"
         android:layout_gravity="bottom" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:backgroundTint="@color/bgPageBody"
         android:layout_marginTop="150dp"
         app:cardCornerRadius="18dp">
 
@@ -36,12 +38,13 @@
                     android:layout_height="wrap_content"
                     android:alpha="0.9"
                     android:text="Kategori Informasi"
-                    android:textColor="@color/textColor2"
+                    android:textColor="@color/txtAllKatColor"
                     android:textSize="18sp" />
 
                 <ImageView
                     android:id="@+id/imageView_closeKategori_tryout"
                     android:layout_width="wrap_content"
+                    app:tint="@color/txtAllKatColor"
                     android:layout_alignParentEnd="true"
                     android:src="@drawable/ic_baseline_close"
                     android:layout_height="wrap_content"/>

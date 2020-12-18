@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/bgPageSetting"
     android:layout_height="match_parent"
-    android:background="#FAFAFA"
     tools:context=".SettingPage.SettingFragment">
 
     <ScrollView
@@ -19,7 +19,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/colorPrimary"
+                android:backgroundTint="@color/bgPageHeader"
                 app:cardElevation="5dp">
 
                 <LinearLayout
@@ -39,7 +39,7 @@
                             android:layout_height="wrap_content"
                             android:layout_centerInParent="true"
                             android:text="PENGATURAN"
-                            android:textColor="@color/textColor1"
+                            android:textColor="@color/txtPageHeader"
                             android:textSize="20sp" />
                     </RelativeLayout>
 
@@ -89,7 +89,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Nama"
-                                android:textColor="@color/textColor1"
+                                android:textColor="@color/txtPageHeader"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -98,7 +98,7 @@
                                 android:layout_height="wrap_content"
                                 android:alpha="0.6"
                                 android:text="email@gmail.com"
-                                android:textColor="@color/textColor1"
+                                android:textColor="@color/txtPageHeader"
                                 android:textSize="14sp" />
                         </LinearLayout>
 
@@ -249,7 +249,7 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="4dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -262,40 +262,58 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Notifiksai"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_darkMode"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="20dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="0dp">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginStart="@dimen/page_margin"
-                        android:text="Tema aplikasi"
-                        android:textColor="@color/textColor2"
-                        android:textSize="18sp" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="end|center_vertical"
-                        android:layout_marginStart="@dimen/page_margin"
-                        android:layout_marginEnd="@dimen/page_margin"
-                        android:alpha="0.5"
-                        android:text="Terang"
-                        android:textColor="@color/textColor2"
-                        android:textSize="14sp" />
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/page_margin"
+                            android:text="Tema aplikasi"
+                            android:textColor="@color/txtItemColor"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/textView_darkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/page_margin"
+                            android:layout_marginEnd="@dimen/page_margin"
+                            android:layout_toStartOf="@+id/darkMode"
+                            android:alpha="0.5"
+                            android:text="Terang"
+                            android:textColor="@color/txtItemColor"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/darkMode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="@dimen/page_margin"
+                            android:checked="false" />
+                    </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
 
@@ -303,7 +321,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -316,7 +334,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Hubungi kami"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
 
@@ -324,7 +342,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -337,7 +355,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Syarat &amp; Ketentuan"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
 
@@ -345,7 +363,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -358,7 +376,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Beri Rating"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
 
@@ -369,8 +387,8 @@
                     android:backgroundTint="@color/white"
                     android:clickable="true"
                     android:focusable="true"
-                    android:visibility="gone"
                     android:foreground="@drawable/custom_ripple"
+                    android:visibility="gone"
                     app:cardCornerRadius="4dp"
                     app:cardElevation="0dp">
 
@@ -388,7 +406,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -401,7 +419,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Tentang aplikasi"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
 
@@ -411,7 +429,7 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="0dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
@@ -424,7 +442,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Keluar"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
 
                     <ImageView
@@ -441,12 +459,13 @@
                     android:layout_height="60dp"
                     android:layout_marginTop="20dp"
                     android:layout_marginBottom="24dp"
-                    android:backgroundTint="@color/white"
+                    android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
-                    app:cardElevation="0dp"
                     android:focusable="true"
                     android:foreground="@drawable/custom_ripple"
-                    app:cardCornerRadius="4dp">
+                    android:visibility="gone"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp">
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -454,7 +473,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Admin"
-                        android:textColor="@color/textColor2"
+                        android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
 
                     <ImageView

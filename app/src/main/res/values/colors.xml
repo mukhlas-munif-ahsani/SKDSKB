@@ -16,6 +16,23 @@
     <color name="bgBlue">#0E9BF5</color>
     <color name="bgWhite">#FFFFFF</color>
 
+    <color name="bgSplashScreen">#FFFFFF</color>
+    <color name="txtSplashScreen">#2b2b2b</color>
+    <color name="notifBarSplashScreen">#FFFFFF</color>
+
+    <color name="bgPageHeader">#0E9BF5</color>
+    <color name="txtPageHeader">#FFFFFF</color>
+    <color name="bgPageBody">#FFFFFF</color>
+
+    <color name="bgPageSetting">#F4F4F4</color>
+    <color name="bgBorderPageMateri">#F4F4F4</color>
+    <color name="iconBoarderColor">#2B2B2B</color>
+
+    <color name="txtItemColor">#2B2B2B</color>
+    <color name="txtAllKatColor">#2B2B2B</color>
+    <color name="txtMateriColor">#2B2B2B</color>
+    <color name="txtNavBarColor">#0E9BF5</color>
+
     <color name="transparent">#00555555</color>
 
 </resources>

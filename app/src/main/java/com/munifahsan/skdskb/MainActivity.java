@@ -3,6 +3,7 @@ package com.munifahsan.skdskb;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
@@ -11,6 +12,8 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.gms.ads.AdListener;
@@ -61,6 +64,20 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+         /*
+        Change status bar color
+         */
+        Window window = this.getWindow();
+
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.bgPageHeader));
 
         MobileAds.initialize(this, new OnInitializationCompleteListener() {
             @Override
@@ -166,6 +183,12 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         }
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+       // getFragmentPage(new HomeFragment());
+
+    }
 
     public void checkConnection(){
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
