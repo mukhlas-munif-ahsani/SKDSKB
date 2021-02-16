@@ -1,7 +1,15 @@
 <resources>
-    <string name="app_name">SKD SKB Indonesia</string>
+    <string name="app_name">Ruang ASN</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="bannerUnitId">ca-app-pub-3995819957494273/9479173692</string>
+    <string name="bannerUnitId">ca-app-pub-5864996205675036/2296908971</string>
     <string name="bannerTest">ca-app-pub-3940256099942544/6300978111</string>
+
+
+
+<!--    About page-->
+    <string name="app_version">Versi 1.2 (Beta)</string>
+    <string name="app_desc">Aplikasi edukasi tentang SKD dan SKB.</string>
+    <string name="pupgrade_premium_txt"><![CDATA[Hapus Iklan & akses konten Premium]]></string>
+
 </resources>

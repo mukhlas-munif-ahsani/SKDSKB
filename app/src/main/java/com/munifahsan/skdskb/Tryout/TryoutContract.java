@@ -21,6 +21,8 @@ public interface TryoutContract {
         void setSeen(List<String> uids);
 
         void setFavo(List<String> uids);
+
+        void setTitle(String title);
     }
 
     interface Presenter{
@@ -65,6 +67,6 @@ public interface TryoutContract {
 
         void getFavoListener(List<String> uid);
 
-        void getDataSuccess(String jenis, Date time, String link);
+        void getDataSuccess(String jenis, Date time, String link, String title);
     }
 }

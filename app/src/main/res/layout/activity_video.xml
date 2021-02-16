@@ -9,7 +9,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rel_iklan_space">
 
         <com.google.android.material.appbar.AppBarLayout
             android:id="@+id/appbar"
@@ -354,9 +355,9 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerInParent="true"
-                            app:tint="@color/iconBoarderColor"
                             android:alpha="0.7"
-                            android:src="@drawable/ic_baseline_text_fields" />
+                            android:src="@drawable/ic_baseline_text_fields"
+                            app:tint="@color/iconBoarderColor" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -372,9 +373,9 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerInParent="true"
-                            app:tint="@color/iconBoarderColor"
                             android:alpha="0.7"
-                            android:src="@drawable/ic_baseline_share" />
+                            android:src="@drawable/ic_baseline_share"
+                            app:tint="@color/iconBoarderColor" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -390,10 +391,10 @@
                             android:layout_width="25dp"
                             android:layout_height="25dp"
                             android:layout_centerVertical="true"
-                            app:tint="@color/iconBoarderColor"
-                            android:alpha="0.7"
                             android:layout_marginStart="14dp"
-                            android:src="@drawable/ic_baseline_remove_red_eye" />
+                            android:alpha="0.7"
+                            android:src="@drawable/ic_baseline_remove_red_eye"
+                            app:tint="@color/iconBoarderColor" />
 
                         <TextView
                             android:id="@+id/textView_number"
@@ -402,10 +403,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
-                            android:textColor="@color/iconBoarderColor"
-                            android:alpha="0.7"
                             android:layout_toEndOf="@+id/imageView_seen"
+                            android:alpha="0.7"
                             android:text="0"
+                            android:textColor="@color/iconBoarderColor"
                             android:textSize="12sp" />
                     </RelativeLayout>
 
@@ -434,10 +435,10 @@
                             android:layout_centerVertical="true"
                             android:layout_marginStart="8dp"
                             android:layout_marginEnd="8dp"
-                            android:textColor="@color/iconBoarderColor"
-                            android:alpha="0.7"
                             android:layout_toEndOf="@+id/imageView_favo"
+                            android:alpha="0.7"
                             android:text="0"
+                            android:textColor="@color/iconBoarderColor"
                             android:textSize="12sp" />
                     </RelativeLayout>
                 </RelativeLayout>
@@ -458,16 +459,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:alpha="0.4"
-            android:clickable="false"
-            android:background="@color/grey" />
+            android:background="@color/grey"
+            android:clickable="false" />
 
         <androidx.cardview.widget.CardView
             android:layout_width="300dp"
-            android:clickable="true"
             android:layout_height="140dp"
             android:layout_centerInParent="true"
-            app:cardCornerRadius="8dp"
-            android:focusable="true">
+            android:clickable="true"
+            android:focusable="true"
+            app:cardCornerRadius="8dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -489,12 +490,12 @@
                     android:layout_height="30dp"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/custom_ripple"
-                    android:clickable="true"
                     android:layout_marginTop="@dimen/page_margin"
                     android:layout_marginEnd="@dimen/page_margin"
-                    android:src="@drawable/ic_baseline_close"
-                    android:focusable="true" />
+                    android:background="@drawable/custom_ripple"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:src="@drawable/ic_baseline_close" />
 
                 <LinearLayout
                     android:layout_width="190dp"
@@ -512,10 +513,10 @@
                         android:layout_height="30dp"
                         android:layout_gravity="center_vertical"
                         android:layout_margin="8dp"
-                        android:clickable="true"
                         android:background="@drawable/custom_ripple"
-                        android:src="@drawable/ic_baseline_remove_circle"
-                        android:focusable="true" />
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_baseline_remove_circle" />
 
                     <TextView
                         android:id="@+id/textView_textSize"
@@ -532,10 +533,10 @@
                         android:layout_height="30dp"
                         android:layout_gravity="end|center_vertical"
                         android:layout_margin="8dp"
-                        android:clickable="true"
                         android:background="@drawable/custom_ripple"
-                        android:src="@drawable/ic_baseline_add_circle"
-                        android:focusable="true" />
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:src="@drawable/ic_baseline_add_circle" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -544,9 +545,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
-                    android:background="@drawable/custom_ripple"
                     android:layout_marginEnd="12dp"
                     android:layout_marginBottom="30dp"
+                    android:background="@drawable/custom_ripple"
                     android:orientation="horizontal">
 
                     <TextView
@@ -560,4 +561,61 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_iklan_space"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/lin_fake_iklan"
+            android:layout_height="wrap_content"
+            android:background="@color/bgPageHeader"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/icon_skdskb_putih" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_marginEnd="4dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/pupgrade_premium_txt"
+                android:textColor="@color/txtPageHeader"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_upgrade"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                android:backgroundTint="@color/green"
+                android:text="Upgrade now"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="0dp"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/bannerUnitId" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

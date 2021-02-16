@@ -1,5 +1,7 @@
 package com.munifahsan.skdskb.Ebook;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -21,19 +23,38 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.github.barteksc.pdfviewer.listener.OnLoadCompleteListener;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.munifahsan.skdskb.Articel.ArticleContract;
+import com.munifahsan.skdskb.BillingClientSetup;
+import com.munifahsan.skdskb.BuildConfig;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.SignIn.SignInActivity;
+import com.munifahsan.skdskb.SubscribeActivity;
+import com.munifahsan.skdskb.Tryout.TryoutActivity;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -50,9 +71,18 @@ import es.voghdev.pdfviewpager.library.adapter.PDFPagerAdapter;
 import es.voghdev.pdfviewpager.library.remote.DownloadFile;
 import es.voghdev.pdfviewpager.library.util.FileUtil;
 
-public class EbookActivity extends AppCompatActivity implements EbookContract.View {
+public class EbookActivity extends AppCompatActivity implements EbookContract.View, PurchasesUpdatedListener {
 
-//    @BindView(R.id.webView_link)
+    @BindView(R.id.rel_iklan_space)
+    RelativeLayout mIklanSpace;
+    @BindView(R.id.lin_fake_iklan)
+    LinearLayout mFakeIklan;
+
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
+
+    //    @BindView(R.id.webView_link)
 //    WebView mWebView;
     @BindView(R.id.imageView_bookmark_ebook)
     ImageView mBookmark;
@@ -85,6 +115,10 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
     RelativeLayout mTextSizeSet;
     @BindView(R.id.textView_textSize)
     TextView mTextSize;
+
+    @BindView(R.id.adView)
+    AdView mAdView;
+
     int fontSize = 16;
     boolean isFavo = false;
 
@@ -99,6 +133,7 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
     String document_id;
 
     boolean isMarked = false;
+    private String title;
 
     @SuppressLint("SetJavaScriptEnabled")
     @Override
@@ -111,10 +146,62 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
         ButterKnife.bind(this);
         mPres = new EbookPresenter(this);
 
+        setupSubsBillingClient();
+        setupBillingClient();
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mFakeIklan.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                showMessage(adError.getMessage());
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+                showMessage("ad open");
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
+
+
         Intent intent = getIntent();
         document_id = intent.getStringExtra("DOCUMENT_ID");
 
-        if (mCurrentUser != null){
+        if (mCurrentUser != null) {
             mPres.getBookmark(document_id, mCurrentUser.getUid());
             mPres.getFavo(document_id, mCurrentUser.getUid());
         }
@@ -139,9 +226,110 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.bgPageHeader));
     }
 
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+
+                    if (purchases != null) {
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+
+                } else {
+                    Toast.makeText(EbookActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(EbookActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    // if (purchases.size() > 0) {
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                    //}
+                } else {
+                    Toast.makeText(EbookActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(EbookActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                mIklanSpace.setVisibility(View.GONE);
+                //showMessage("You are premium");
+            }
+        }
+    }
+
+    @OnClick(R.id.btn_upgrade)
+    public void upgrade() {
+        Intent intent = new Intent(this, SubscribeActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     public void setWebView(String link) {
-       // mWebView.setVisibility(View.VISIBLE);
+        // mWebView.setVisibility(View.VISIBLE);
 
         String url = "https://drive.google.com/file/d/1g-XOjPXcFcoaIIx8uvRMXYnlL3xIjQ_r";
 
@@ -149,18 +337,18 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
         new RetrivePdfStream().execute(link);
     }
 
-    private class RetrivePdfStream extends AsyncTask<String,Void, InputStream> {
+    private class RetrivePdfStream extends AsyncTask<String, Void, InputStream> {
         @Override
         protected InputStream doInBackground(String... strings) {
 
             InputStream inputStream = null;
             try {
                 URL url = new URL(strings[0]);
-                HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-                if (urlConnection.getResponseCode() == 200){
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                if (urlConnection.getResponseCode() == 200) {
                     inputStream = new BufferedInputStream(urlConnection.getInputStream());
                 }
-            } catch (IOException e){
+            } catch (IOException e) {
                 return null;
             }
             return inputStream;
@@ -173,7 +361,7 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
                 public void loadComplete(int nbPages) {
                     mContentShimmer.setVisibility(View.INVISIBLE);
 
-                    if (mCurrentUser != null){
+                    if (mCurrentUser != null) {
                         mPres.addSeen(document_id, mCurrentUser.getUid());
                     }
 
@@ -305,14 +493,26 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
     }
 
     @OnClick(R.id.lin_default_textSize)
-    public void fontSizeDefault(){
+    public void fontSizeDefault() {
         mTextSize.setText(String.valueOf(16));
         fontSize = 16;
     }
 
+    @Override
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     @OnClick(R.id.relative_share)
     public void shareOnClick() {
-
+        if (!title.equals("")) {
+            String shareMessage = "\n" + title + "\n\nBaca Menggunakan aplikasi SKD SKB Indonesia\n";
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n");
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
     }
 
     @OnClick(R.id.imageView_min)
@@ -373,14 +573,13 @@ public class EbookActivity extends AppCompatActivity implements EbookContract.Vi
 //        if (mWebView.canGoBack()) {
 //            mWebView.goBack();
 //        } else {
-            super.onBackPressed();
+        super.onBackPressed();
 //        }
     }
 
     private void showMessage(String msg) {
         Toast.makeText(this, msg, Toast.LENGTH_LONG).show();
     }
-
 
 
 //    @Override

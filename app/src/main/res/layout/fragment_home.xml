@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/bgPageBody"
     android:layout_height="match_parent"
+    android:background="@color/bgPageBody"
     tools:context=".HomePage.view.HomeFragment">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -15,6 +15,7 @@
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/bgPageHeader"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
 
             <androidx.cardview.widget.CardView
@@ -53,8 +54,8 @@
                             android:id="@+id/textView_greatingShimmer_home"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
                             android:layout_alignParentStart="true"
+                            android:layout_marginTop="4dp"
                             android:visibility="invisible">
 
                             <androidx.cardview.widget.CardView
@@ -92,19 +93,19 @@
 
                         <RelativeLayout
                             android:id="@+id/relative_notif_home"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
                             android:layout_centerVertical="true"
-                            android:background="@drawable/custom_ripple"
                             android:layout_marginEnd="12dp"
-                            android:layout_toStartOf="@+id/circleImage_photo_home">
+                            android:layout_toStartOf="@+id/circleImage_photo_home"
+                            android:background="@drawable/custom_ripple">
 
                             <ImageView
                                 android:id="@+id/imageView_notif_home"
                                 android:layout_width="30dp"
                                 android:layout_height="30dp"
-                                android:layout_centerVertical="true"
                                 android:layout_centerHorizontal="true"
+                                android:layout_centerVertical="true"
                                 android:src="@drawable/ic_baseline_notifications" />
 
                         </RelativeLayout>
@@ -368,142 +369,149 @@
             </androidx.cardview.widget.CardView>
         </com.google.android.material.appbar.AppBarLayout>
 
-        <androidx.core.widget.NestedScrollView
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             android:layout_below="@+id/appbar"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:id="@+id/refresh"
+            android:layout_height="match_parent">
 
-            <LinearLayout
+            <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                    <LinearLayout
-                        android:id="@+id/lin_listOne_home"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:visibility="visible">
+                        android:layout_height="wrap_content">
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:id="@+id/lin_listOne_home"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/page_margin"
-                            android:layout_marginTop="18dp"
-                            android:layout_marginEnd="@dimen/page_margin">
+                            android:orientation="vertical"
+                            android:visibility="visible">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:alpha="0.9"
-                                android:text="Pilihan Editor"
-                                android:textColor="@color/txtItemColor"
-                                android:textSize="14sp" />
+                                android:layout_marginStart="@dimen/page_margin"
+                                android:layout_marginTop="18dp"
+                                android:layout_marginEnd="@dimen/page_margin">
 
-                            <TextView
-                                android:id="@+id/textView_allListOne_home"
-                                android:layout_width="wrap_content"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.9"
+                                    android:text="Pilihan Editor"
+                                    android:textColor="@color/txtItemColor"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_allListOne_home"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:alpha="0.6"
+                                    android:text="Lihat Semua"
+                                    android:textColor="@color/textColor2"
+                                    android:textSize="12sp"
+                                    android:visibility="invisible" />
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:background="@color/grey" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerView_listOne_home"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentBottom="true"
-                                android:alpha="0.6"
-                                android:text="Lihat Semua"
-                                android:textColor="@color/textColor2"
-                                android:textSize="12sp"
-                                android:visibility="invisible" />
-                        </RelativeLayout>
+                                android:layout_marginStart="0dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginEnd="0dp"
+                                android:layout_marginBottom="8dp"
+                                android:clipToPadding="false" />
+                        </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@color/grey" />
+                        <include layout="@layout/shimmer_list_one_home" />
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView_listOne_home"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="0dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginBottom="8dp"
-                            android:clipToPadding="false" />
-                    </LinearLayout>
+                    </RelativeLayout>
 
-                    <include layout="@layout/shimmer_list_one_home" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <LinearLayout
-                        android:id="@+id/lin_listTwo_home"
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
+                        android:layout_height="wrap_content">
 
-                        <RelativeLayout
+                        <LinearLayout
+                            android:id="@+id/lin_listTwo_home"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="@dimen/page_margin"
-                            android:layout_marginTop="18dp"
-                            android:layout_marginEnd="@dimen/page_margin">
+                            android:orientation="vertical">
 
-                            <TextView
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:alpha="0.8"
-                                android:text="Materi"
-                                android:textColor="@color/txtItemColor"
-                                android:textSize="14sp" />
+                                android:layout_marginStart="@dimen/page_margin"
+                                android:layout_marginTop="18dp"
+                                android:layout_marginEnd="@dimen/page_margin">
 
-                            <TextView
-                                android:id="@+id/textView_allListTwo_home"
-                                android:layout_width="wrap_content"
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.8"
+                                    android:text="Materi"
+                                    android:textColor="@color/txtItemColor"
+                                    android:textSize="14sp" />
+
+                                <TextView
+                                    android:id="@+id/textView_allListTwo_home"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_alignParentBottom="true"
+                                    android:alpha="0.6"
+                                    android:text="Lihat Semua"
+                                    android:textColor="@color/textColor2"
+                                    android:textSize="12sp"
+                                    android:visibility="invisible" />
+                            </RelativeLayout>
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="16dp"
+                                android:background="@color/grey" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/recyclerView_listTwo_home"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_alignParentEnd="true"
-                                android:layout_alignParentBottom="true"
-                                android:alpha="0.6"
-                                android:text="Lihat Semua"
-                                android:textColor="@color/textColor2"
-                                android:textSize="12sp"
-                                android:visibility="invisible" />
-                        </RelativeLayout>
+                                android:layout_marginStart="0dp"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginEnd="0dp"
+                                android:layout_marginBottom="8dp"
+                                android:clipToPadding="false" />
+                        </LinearLayout>
 
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginStart="16dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="16dp"
-                            android:background="@color/grey" />
+                        <include layout="@layout/shimmer_list_two_home" />
+                    </RelativeLayout>
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/recyclerView_listTwo_home"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="0dp"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginEnd="0dp"
-                            android:layout_marginBottom="8dp"
-                            android:clipToPadding="false" />
-                    </LinearLayout>
+                </LinearLayout>
 
-                    <include layout="@layout/shimmer_list_two_home" />
-                </RelativeLayout>
+            </androidx.core.widget.NestedScrollView>
 
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -513,5 +521,5 @@
         <include layout="@layout/bottom_sheet_kategori_materi" />
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
+

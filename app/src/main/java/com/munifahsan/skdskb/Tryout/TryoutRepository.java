@@ -39,7 +39,7 @@ public class TryoutRepository implements TryoutContract.Repository {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 MateriListModel model = documentSnapshot.toObject(MateriListModel.class);
-                mListener.getDataSuccess(model.getnJenis(), model.getnUploadTime(), model.getnWebUrl());
+                mListener.getDataSuccess(model.getnJenis(), model.getnUploadTime(), model.getnWebUrl(), model.getnTitle());
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

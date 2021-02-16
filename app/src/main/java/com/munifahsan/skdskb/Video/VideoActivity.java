@@ -1,5 +1,7 @@
 package com.munifahsan.skdskb.Video;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -22,19 +24,38 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.munifahsan.skdskb.Articel.ArticleActivity;
 import com.munifahsan.skdskb.Articel.ArticleContract;
 import com.munifahsan.skdskb.Articel.ArticlePresenter;
+import com.munifahsan.skdskb.BillingClientSetup;
+import com.munifahsan.skdskb.BuildConfig;
+import com.munifahsan.skdskb.MainActivity;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.SignIn.SignInActivity;
+import com.munifahsan.skdskb.SubscribeActivity;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.PlayerConstants;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.YouTubePlayerListener;
@@ -51,12 +72,21 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class VideoActivity extends AppCompatActivity implements Html.ImageGetter, VideoContract.View{
+public class VideoActivity extends AppCompatActivity implements Html.ImageGetter, VideoContract.View, PurchasesUpdatedListener {
 
     public static final String URL_REGEX = "^((https?|ftp)://|(www|ftp)\\.)?[a-z0-9-]+(\\.[a-z0-9-]+)+([/?].*)?$";
 
     private final static String TAG = "TestImageGetter";
     TextView mTv;
+
+    @BindView(R.id.rel_iklan_space)
+    RelativeLayout mIklanSpace;
+    @BindView(R.id.lin_fake_iklan)
+    LinearLayout mFakeIklan;
+
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
 
     @BindView(R.id.imageView_bookmark_video)
     ImageView mBookmark;
@@ -95,6 +125,11 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
     RelativeLayout mTextSizeSet;
     @BindView(R.id.textView_textSize)
     TextView mTextSize;
+
+
+    @BindView(R.id.adView)
+    AdView mAdView;
+
     int fontSize = 16;
     boolean isFavo = false;
 
@@ -112,6 +147,8 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
 
     String document_id;
 
+    String title;
+
     boolean isMarked = false;
 
     @Override
@@ -123,6 +160,56 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
 
         ButterKnife.bind(this);
         mVideoPres = new VideoPresenter(this);
+
+        setupSubsBillingClient();
+        setupBillingClient();
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
+        mAdView.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+                mFakeIklan.setVisibility(View.GONE);
+
+            }
+
+            @Override
+            public void onAdFailedToLoad(LoadAdError adError) {
+                // Code to be executed when an ad request fails.
+                showMessage(adError.getMessage());
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when an ad opens an overlay that
+                // covers the screen.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                // Code to be executed when the user is about to return
+                // to the app after tapping on an ad.
+            }
+        });
 
         Intent intent = getIntent();
         document_id = intent.getStringExtra("DOCUMENT_ID");
@@ -151,6 +238,106 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
 
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.bgPageHeader));
+    }
+
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+
+                } else {
+                    Toast.makeText(VideoActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(VideoActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    // if (purchases.size() > 0) {
+                    if (purchases != null){
+                         for (Purchase purchase : purchases) {
+                        handleItemAlreadyPurchase(purchase);
+                    }
+                    }
+
+                    //}
+                } else {
+                    Toast.makeText(VideoActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(VideoActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                mIklanSpace.setVisibility(View.GONE);
+                //showMessage("You are premium");
+            }
+        }
+    }
+
+    @OnClick(R.id.btn_upgrade)
+    public void upgrade(){
+        Intent intent = new Intent(this, SubscribeActivity.class);
+        startActivity(intent);
     }
 
     @Override
@@ -265,6 +452,7 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
 
     @Override
     public void setTitle(String title) {
+        this.title = title;
         mTitle.setText(title);
     }
 
@@ -373,7 +561,14 @@ public class VideoActivity extends AppCompatActivity implements Html.ImageGetter
 
     @OnClick(R.id.relative_share)
     public void shareOnClick() {
-
+        if (!title.equals("")){
+            String shareMessage= "\n" + title + "\n\nBaca Menggunakan aplikasi SKD SKB Indonesia\n";
+            Intent sendIntent = new Intent();
+            sendIntent.setAction(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_TEXT, shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n");
+            sendIntent.setType("text/plain");
+            startActivity(sendIntent);
+        }
     }
 
     @OnClick(R.id.imageView_min)

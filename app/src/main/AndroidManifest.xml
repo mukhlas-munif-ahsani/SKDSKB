@@ -10,12 +10,15 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_app_skdskb"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_app_skdskb"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SyaratKetentuan.SyaratKetentuanActivity"></activity>
+        <activity android:name=".SubscribeActivity"></activity>
+        <activity android:name=".TestPurchaseActivity" />
+        <activity android:name=".SyaratKetentuanActivity" />
+        <activity android:name=".SyaratKetentuan.SyaratKetentuanActivity" />
         <activity android:name=".Hubungi.HubungiActivity" />
         <activity android:name=".NotifPage.NotifActivity" />
         <activity android:name=".MainAdminActivity" />
@@ -26,7 +29,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-3995819957494273~5806494325" />
+            android:value="ca-app-pub-5864996205675036~4923072310" />
 
         <activity android:name=".SplashScreenActivity">
             <intent-filter>

@@ -72,11 +72,12 @@ public class TryoutPresenter implements TryoutContract.Presenter, TryoutContract
     }
 
     @Override
-    public void getDataSuccess(String jenis, Date time, String link) {
+    public void getDataSuccess(String jenis, Date time, String link, String title) {
 
         mView.setJenis(jenis);
         mView.setTime(getTimeDate(time));
         mView.setWebView(link);
+        mView.setTitle(title);
 
     }
 

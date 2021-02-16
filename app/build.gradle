@@ -9,8 +9,8 @@ android {
         applicationId "com.munifahsan.skdskb"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 2
-        versionName "1.1"
+        versionCode 4
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -40,6 +40,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-ads:19.5.0'
     //implementation 'com.google.firebase:firebase-ads:19.5.0'
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
+    implementation files('libs\\android-viewbadger.jar')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -93,7 +94,7 @@ dependencies {
     implementation 'org.ocpsoft.prettytime:prettytime:4.0.1.Final'
 
 
-    implementation 'com.google.android.gms:play-services-ads:19.5.0'
+    implementation 'com.google.android.gms:play-services-ads:19.6.0'
 
     // Import the BoM for the Firebase platform
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
@@ -111,12 +112,17 @@ dependencies {
     implementation 'com.pierfrancescosoffritti.androidyoutubeplayer:core:10.0.5'
 
     //Google billing
-    implementation "com.android.billingclient:billing:3.0.1"
+    implementation "com.android.billingclient:billing:3.0.2"
 
 
     //pdf viewwer
     implementation 'es.voghdev.pdfviewpager:library:1.1.2'
     implementation 'com.github.barteksc:android-pdf-viewer:2.8.2'
 
+    //Image slider
+    implementation 'com.github.smarteist:autoimageslider:1.3.9'
+
+    implementation 'com.anjlab.android.iab.v3:library:1.0.44'
 
 }
+apply plugin: 'com.google.gms.google-services'

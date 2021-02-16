@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="@color/bgPageSubs"
+    android:layout_height="match_parent"
+    tools:context=".SubscribeActivity">
+
+    <TextView
+        android:id="@+id/txt_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/page_margin"
+        android:text="PREMIUM"
+        android:visibility="invisible"
+        android:textSize="18sp" />
+
+    <com.smarteist.autoimageslider.SliderView
+        android:id="@+id/imageSlider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="18dp"
+        android:layout_above="@+id/subs_sroll"
+        app:sliderAnimationDuration="600"
+        app:sliderAutoCycleDirection="back_and_forth"
+        app:sliderAutoCycleEnabled="true"
+        app:sliderIndicatorAnimationDuration="600"
+        app:sliderIndicatorGravity="start|bottom"
+        app:sliderIndicatorMargin="15dp"
+        app:sliderIndicatorSelectedColor="@color/black"
+        app:sliderIndicatorUnselectedColor="@color/bgBlue"
+        app:sliderIndicatorMarginBottom="20dp"
+        app:sliderIndicatorMarginLeft="20dp"
+        app:sliderIndicatorOrientation="horizontal"
+        app:sliderIndicatorPadding="3dp"
+        app:sliderIndicatorRadius="2dp"
+        app:sliderScrollTimeInSec="8"
+        app:sliderStartAutoCycle="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/page_margin"
+        android:text="Upgrade PREMIUM"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:textSize="18sp" />
+
+    <ImageView
+        android:id="@+id/close_subs_page"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="@dimen/page_margin"
+        android:src="@drawable/ic_baseline_close"
+        app:tint="@color/white"/>
+
+    <TextView
+        android:id="@+id/premiumTxt"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/imageSlider"
+        android:layout_above="@+id/btn_cancel_purchase"
+        android:textStyle="bold"
+        android:textColor="@color/txtItemColor"
+        android:textSize="22sp"
+        android:text="ANDA SEDANG MENGGUNAKAN APLIKASI PREMIUM"
+        android:gravity="center"
+        android:alpha="0.6"/>
+
+    <HorizontalScrollView
+        android:id="@+id/subs_sroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_cancel_purchase"
+        android:layout_marginBottom="8dp"
+        android:clipToPadding="false"
+        android:paddingStart="18dp"
+        android:paddingEnd="18dp"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_purchase"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_purchase2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </HorizontalScrollView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/btn_cancel_purchase"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:backgroundTint="@color/bgPageBody"
+        android:clickable="true"
+        android:alpha="0.6"
+        android:focusable="true"
+        android:foreground="@drawable/custom_ripple"
+        app:cardCornerRadius="4dp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="TIDAK TERIMAKASIH"
+            android:textColor="@color/txtItemColor"
+            android:textSize="14sp" />
+
+    </androidx.cardview.widget.CardView>
+
+</RelativeLayout>

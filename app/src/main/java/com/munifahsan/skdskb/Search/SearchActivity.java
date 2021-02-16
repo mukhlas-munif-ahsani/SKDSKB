@@ -1,6 +1,7 @@
 package com.munifahsan.skdskb.Search;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,13 @@ import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -30,6 +38,8 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.munifahsan.skdskb.Adapters.SearchAdapter;
 import com.munifahsan.skdskb.Articel.ArticleActivity;
+import com.munifahsan.skdskb.BillingClientSetup;
+import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
 import com.munifahsan.skdskb.DetailKategori.DetailKategoriContract;
 import com.munifahsan.skdskb.Ebook.EbookActivity;
 import com.munifahsan.skdskb.Models.MateriListModel;
@@ -37,11 +47,13 @@ import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.Tryout.TryoutActivity;
 import com.munifahsan.skdskb.Video.VideoActivity;
 
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SearchActivity extends AppCompatActivity {
+public class SearchActivity extends AppCompatActivity implements PurchasesUpdatedListener {
 
     @BindView(R.id.bottom_sheet_search_filter)
     FrameLayout mBottomSheetFilter;
@@ -83,12 +95,19 @@ public class SearchActivity extends AppCompatActivity {
     String searchValue;
     String kategori;
 
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
+
+        setupBillingClient();
+        setupSubsBillingClient();
 
          /*
         Change status bar color
@@ -113,6 +132,101 @@ public class SearchActivity extends AppCompatActivity {
         showList(mListRef.whereEqualTo("nTipe", kategori));
         bottomSheetFilter();
     }
+
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(DetailKategoriActivity.this, "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+                    if (purchases != null){
+                        if (purchases.size() > 0) {
+                            for (Purchase purchase : purchases) {
+                                handleItemAlreadyPurchase(purchase);
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(SearchActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(SearchActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(DetailKategoriActivity.this, "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    if (purchases != null){
+                        if (purchases.size() > 0) {
+                            for (Purchase purchase : purchases) {
+                                handleItemAlreadyPurchase(purchase);
+                            }
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(SearchActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(SearchActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                //showMessage("You are premium");
+            }
+        }
+    }
+
 
     private void bottomSheetFilter() {
         /*
@@ -255,28 +369,72 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void sendToArtikel(String id, boolean isPremium) {
-        Intent intent = new Intent(getApplicationContext(), ArticleActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToArtikel(String id, boolean isPremiumContent) {
+        if (isPremiumContent){
+            if (isPremium){
+                Intent intent = new Intent(this, ArticleActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(this, ArticleActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToVideo(String id, boolean isPremium) {
-        Intent intent = new Intent(getApplicationContext(), VideoActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToVideo(String id, boolean isPremiumContent) {
+        if (isPremiumContent){
+            if (isPremium){
+                Intent intent = new Intent(this, VideoActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(this, VideoActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToEbook(String id, boolean isPremium) {
-        Intent intent = new Intent(getApplicationContext(), EbookActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToEbook(String id, boolean isPremiumContent) {
+        if (isPremiumContent){
+            if (isPremium){
+                Intent intent = new Intent(this, EbookActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(this, EbookActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToTryout(String id, boolean isPremium) {
-        Intent intent = new Intent(getApplicationContext(), TryoutActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToTryout(String id, boolean isPremiumContent) {
+        if (isPremiumContent){
+            if (isPremium){
+                Intent intent = new Intent(this, TryoutActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(this, TryoutActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
 

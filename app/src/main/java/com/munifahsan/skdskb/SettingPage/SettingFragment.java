@@ -1,13 +1,20 @@
 package com.munifahsan.skdskb.SettingPage;
 
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.cardview.widget.CardView;
@@ -19,9 +26,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -32,12 +47,18 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.munifahsan.skdskb.BillingClientSetup;
 import com.munifahsan.skdskb.DarkMode;
+import com.munifahsan.skdskb.MainActivity;
 import com.munifahsan.skdskb.MainAdminActivity;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.SignIn.SignInActivity;
 import com.munifahsan.skdskb.SplashScreenActivity;
+import com.munifahsan.skdskb.SubscribeActivity;
 import com.munifahsan.skdskb.Subscription.SubscriptionActivity;
+import com.munifahsan.skdskb.SyaratKetentuanActivity;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,8 +66,9 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.content.Context.MODE_PRIVATE;
+import static androidx.core.content.ContextCompat.getSystemService;
 
-public class SettingFragment extends Fragment {
+public class SettingFragment extends Fragment implements PurchasesUpdatedListener {
 
     public SettingFragment() {
         // Required empty public constructor
@@ -77,6 +99,9 @@ public class SettingFragment extends Fragment {
     @BindView(R.id.logout)
     CardView mLogout;
 
+    @BindView(R.id.imageView_upgrade_setting)
+    ImageView mUpgradeCheck;
+
     @BindView(R.id.cardView_darkMode)
     CardView mCardDarkMode;
     @BindView(R.id.textView_darkMode)
@@ -86,6 +111,13 @@ public class SettingFragment extends Fragment {
 
     @BindView(R.id.admin)
     CardView mAdminButton;
+
+    @BindView(R.id.rel_about)
+    RelativeLayout mRelAbout;
+
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
 
     String mCurrentId;
     private FirebaseFirestore firebaseFirestore;
@@ -119,7 +151,8 @@ public class SettingFragment extends Fragment {
 
         darkMode = new DarkMode();
 
-
+        setupSubsBillingClient();
+        setupBillingClient();
 
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -309,8 +342,107 @@ public class SettingFragment extends Fragment {
 
         }
 
+        if (isPremium){
+            mUpgradeCheck.setVisibility(View.VISIBLE);
+        }
+
         return view;
     }
+
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(getActivity(), this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(getActivity(), "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(getActivity(), this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    // if (purchases.size() > 0) {
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                    //}
+                } else {
+                    Toast.makeText(getActivity(), "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(getActivity(), "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                mUpgradeCheck.setVisibility(View.VISIBLE);
+                //showMessage("You are premium");
+            }
+        }
+    }
+
 
     private void showMessage(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
@@ -320,13 +452,11 @@ public class SettingFragment extends Fragment {
     public void signInClick() {
         Intent intent = new Intent(getActivity(), SignInActivity.class);
         startActivity(intent);
-        showMessage("clikc");
     }
 
     @OnClick(R.id.cardView_upgrade)
     public void upgradeClick() {
-        showMessage("click");
-        Intent intent = new Intent(getActivity(), SubscriptionActivity.class);
+        Intent intent = new Intent(getActivity(), SubscribeActivity.class);
         startActivity(intent);
     }
 
@@ -385,6 +515,123 @@ public class SettingFragment extends Fragment {
         Intent intent = new Intent(getActivity(), SplashScreenActivity.class);
         startActivity(intent);
         getActivity().finish();
+    }
+
+    private ClipboardManager clipboardManager;
+    private ClipData clipData;
+
+    @OnClick(R.id.hubungiKami)
+    public void hubungiKami(){
+
+        clipboardManager = (ClipboardManager)getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+
+        String txtcopy = "kelasnesia@gmail.com";
+        clipData = ClipData.newPlainText("text",txtcopy);
+        clipboardManager.setPrimaryClip(clipData);
+
+        Toast.makeText(getActivity(), "kelasnesia@gmail.com\n disalin ke clipboard", Toast.LENGTH_LONG).show();
+    }
+
+    @OnClick(R.id.syaratKetentuan)
+    public void syaratKeten(){
+        Intent intent = new Intent(getActivity(), SyaratKetentuanActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.cardView_rate)
+    public void rateClick(){
+        try{
+            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("market://details?id="+getPackageName())));
+        }
+        catch (ActivityNotFoundException e){
+            startActivity(new Intent("android.intent.action.VIEW", Uri.parse("https://play.google.com/store/apps/details?id="+getPackageName())));
+        }
+    }
+
+    private String getPackageName() {
+        return "com.munifahsan.skdskb";
+    }
+
+    @OnClick(R.id.cardView_about)
+    public void aboutClick(){
+        mRelAbout.setVisibility(View.VISIBLE);
+    }
+
+    @OnClick(R.id.aboutBg)
+    public void aboutBgClick(){
+        mRelAbout.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.imageView_aboutClose)
+    public void aboutClose(){
+        mRelAbout.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.facebook)
+    public void openFacebook(){
+        Intent facebookIntent = new Intent(Intent.ACTION_VIEW);
+        String facebookUrl = getFacebookPageURL(getActivity());
+        facebookIntent.setData(Uri.parse(facebookUrl));
+        startActivity(facebookIntent);
+    }
+
+    public static String FACEBOOK_URL = "https://web.facebook.com/kelasnesia/?_rdc=1&_rdr";
+    public static String FACEBOOK_PAGE_ID = "YourPageName";
+    //method to get the right URL to use in the intent
+    public String getFacebookPageURL(Context context) {
+        PackageManager packageManager = context.getPackageManager();
+        try {
+            int versionCode = packageManager.getPackageInfo("com.facebook.katana", 0).versionCode;
+            if (versionCode >= 3002850) { //newer versions of fb app
+                return "fb://facewebmodal/f?href=" + FACEBOOK_URL;
+            } else { //older versions of fb app
+                return "fb://page/" + FACEBOOK_PAGE_ID;
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            return FACEBOOK_URL; //normal web url
+        }
+    }
+
+    @OnClick(R.id.instagram)
+    public void openInstagram(){
+
+        startActivity(newInstagramProfileIntent(getActivity().getPackageManager(), "https://www.instagram.com/kelasnesia.id"));
+
+    }
+
+    public static Intent newInstagramProfileIntent(PackageManager pm, String url) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        try {
+            if (pm.getPackageInfo("com.instagram.android", 0) != null) {
+                if (url.endsWith("/")) {
+                    url = url.substring(0, url.length() - 1);
+                }
+                final String username = url.substring(url.lastIndexOf("/") + 1);
+                // http://stackoverflow.com/questions/21505941/intent-to-open-instagram-user-profile-on-android
+                intent.setData(Uri.parse("http://instagram.com/_u/" + username));
+                intent.setPackage("com.instagram.android");
+                return intent;
+            }
+        } catch (PackageManager.NameNotFoundException ignored) {
+        }
+        intent.setData(Uri.parse(url));
+        return intent;
+    }
+
+    @OnClick(R.id.twitter)
+    public void openTwitter(){
+        String urlTw="https://twitter.com/kelasnesia";
+
+        try {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(urlTw));
+            intent.setPackage("com.twitter.android");
+            startActivity(intent);
+        }
+        catch (ActivityNotFoundException anfe) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse(urlTw)));
+        }
     }
 
     public void showDialogOnLogOutBtnOnClick() {

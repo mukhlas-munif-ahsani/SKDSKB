@@ -9,6 +9,7 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
+        android:layout_above="@+id/rel_iklan_space"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -565,4 +566,61 @@
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rel_iklan_space"
+        android:layout_width="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="0dp"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:id="@+id/lin_fake_iklan"
+            android:layout_height="wrap_content"
+            android:background="@color/bgPageHeader"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="14dp"
+                android:src="@drawable/icon_skdskb_putih" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_marginEnd="4dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:text="@string/pupgrade_premium_txt"
+                android:textColor="@color/txtPageHeader"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_upgrade"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="14dp"
+                android:backgroundTint="@color/green"
+                android:text="Upgrade now"
+                android:textAllCaps="false" />
+
+        </LinearLayout>
+
+        <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="0dp"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/bannerUnitId" />
+
+    </RelativeLayout>
+
 </RelativeLayout>

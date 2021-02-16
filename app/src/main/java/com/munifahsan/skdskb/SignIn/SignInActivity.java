@@ -115,6 +115,7 @@ public class SignInActivity extends AppCompatActivity {
 
                                     } else {
                                         Log.w("googleSignUp", "signInWithCredential:failure", task.getException());
+                                        showMessage(task.getException() + "\n\nSignIn Gagal Silahkan Coba Lagi");
                                     }
                                 }
                             });

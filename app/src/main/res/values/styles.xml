@@ -20,4 +20,8 @@
     <style name="NavbarTheme" parent="Widget.Design.BottomNavigationView">
 <!--        <item name="android:fontFamily">@font/cera_gr</item>-->
     </style>
+
+    <style name="src">
+        <item name="android:src">@drawable/icon_skdskb_hitam</item>
+    </style>
 </resources>

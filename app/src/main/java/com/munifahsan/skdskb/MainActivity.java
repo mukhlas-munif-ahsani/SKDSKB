@@ -7,15 +7,26 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -39,16 +50,26 @@ import com.munifahsan.skdskb.TryoutPage.view.TryoutFragment;
 
 
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener, PurchasesUpdatedListener {
 
     @BindView(R.id.bottomNavigationView)
     BottomNavigationView mBottomNavigationView;
     @BindView(R.id.adView)
     AdView mAdView;
+    @BindView(R.id.rel_iklan_space)
+    RelativeLayout mIklanSpace;
+    @BindView(R.id.lin_fake_iklan)
+    LinearLayout mFakeIklan;
+
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
 
     private ConsentInformation consentInformation;
     private ConsentForm consentForm;
@@ -64,6 +85,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         setContentView(R.layout.activity_main);
 
         ButterKnife.bind(this);
+
+        setupSubsBillingClient();
+        setupBillingClient();
 
          /*
         Change status bar color
@@ -86,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         });
 
         ConsentDebugSettings debugSettings = new ConsentDebugSettings.Builder(this)
-//                .addTestDeviceHashedId("E46086AE0C9A7854A391939BB1A0887A")
+                .addTestDeviceHashedId("E46086AE0C9A7854A391939BB1A0887A")
                 .setDebugGeography(ConsentDebugSettings
                         .DebugGeography
                         .DEBUG_GEOGRAPHY_NOT_EEA)
@@ -95,50 +119,49 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         ConsentRequestParameters params = new ConsentRequestParameters
                 .Builder()
-                .setConsentDebugSettings(debugSettings)
+//                .setConsentDebugSettings(debugSettings)
                 .build();
 
-        RequestConfiguration configuration = new RequestConfiguration.Builder()
-//                .setTestDeviceIds(Arrays.asList("E46086AE0C9A7854A391939BB1A0887A"))
-                .build();
-        MobileAds.setRequestConfiguration(configuration);
+//        RequestConfiguration configuration = new RequestConfiguration.Builder()
+////                .setTestDeviceIds(Arrays.asList("E46086AE0C9A7854A391939BB1A0887A"))
+//                .build();
+//        MobileAds.setRequestConfiguration(configuration);
 
         // Set tag for under age of consent. Here false means users are not under age
         //params.setTagForUnderAgeOfConsent(false);
-        consentInformation = UserMessagingPlatform.getConsentInformation(this);
-        consentInformation.requestConsentInfoUpdate(
-                this,
-                params,
-                new ConsentInformation.OnConsentInfoUpdateSuccessListener() {
-                    @Override
-                    public void onConsentInfoUpdateSuccess() {
-                        // The consent information state was updated.
-                        // You are now ready to check if a form is available.
-
-                        // The consent information state was updated.
-                        // You are now ready to check if a form is available.
-                        if (consentInformation.isConsentFormAvailable()) {
-                            loadForm();
-                        }
-                    }
-                },
-                new ConsentInformation.OnConsentInfoUpdateFailureListener() {
-                    @Override
-                    public void onConsentInfoUpdateFailure(FormError formError) {
-
-                    }
-                });
+//        consentInformation = UserMessagingPlatform.getConsentInformation(this);
+//        consentInformation.requestConsentInfoUpdate(
+//                this,
+//                params,
+//                new ConsentInformation.OnConsentInfoUpdateSuccessListener() {
+//                    @Override
+//                    public void onConsentInfoUpdateSuccess() {
+//                        // The consent information state was updated.
+//                        // You are now ready to check if a form is available.
+//
+//                        // The consent information state was updated.
+//                        // You are now ready to check if a form is available.
+//                        if (consentInformation.isConsentFormAvailable()) {
+//                            loadForm();
+//                        }
+//                    }
+//                },
+//                new ConsentInformation.OnConsentInfoUpdateFailureListener() {
+//                    @Override
+//                    public void onConsentInfoUpdateFailure(FormError formError) {
+//
+//                    }
+//                });
 
         mAdView = findViewById(R.id.adView);
         AdRequest adRequest = new AdRequest.Builder().build();
         mAdView.loadAd(adRequest);
 
-
         mAdView.setAdListener(new AdListener() {
             @Override
             public void onAdLoaded() {
                 // Code to be executed when an ad finishes loading.
-                showMessage("ad load");
+                mFakeIklan.setVisibility(View.GONE);
             }
 
             @Override
@@ -151,7 +174,8 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
             public void onAdOpened() {
                 // Code to be executed when an ad opens an overlay that
                 // covers the screen.
-                showMessage("ad open");
+                //showMessage("ad open");
+
             }
 
             @Override
@@ -178,6 +202,10 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         checkConnection();
 
+        if (isPremium){
+            mIklanSpace.setVisibility(View.GONE);
+        }
+
         if (!isConnected){
             showMessage("Anda tidak memeliki koneksi internet");
         }
@@ -190,11 +218,113 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     }
 
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+
+                    if (purchases != null){
+                        showMessage("notnull");
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+
+                } else {
+                    Toast.makeText(MainActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(MainActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(this, this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    // if (purchases.size() > 0) {
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                    //}
+                } else {
+                    Toast.makeText(MainActivity.this, "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                Toast.makeText(MainActivity.this, "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                mIklanSpace.setVisibility(View.GONE);
+                //showMessage("You are premium");
+            }
+        }
+    }
+
     public void checkConnection(){
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         activeNetwork = cm.getActiveNetworkInfo();
         isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
+    }
+
+    @OnClick(R.id.btn_upgrade)
+    public void upgrade(){
+        Intent intent = new Intent(this, SubscribeActivity.class);
+        startActivity(intent);
     }
 
     private void showMessage(String error) {

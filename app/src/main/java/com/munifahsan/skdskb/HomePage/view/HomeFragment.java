@@ -5,11 +5,15 @@ import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +21,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClientStateListener;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.Purchase;
+import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.anjlab.android.iab.v3.BillingProcessor;
+import com.anjlab.android.iab.v3.TransactionDetails;
 import com.bumptech.glide.Glide;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +51,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.munifahsan.skdskb.Adapters.KategoriAdapter;
 import com.munifahsan.skdskb.Articel.ArticleActivity;
+import com.munifahsan.skdskb.BillingClientSetup;
 import com.munifahsan.skdskb.DetailKategori.DetailKategoriActivity;
 import com.munifahsan.skdskb.Adapters.AllKategoriAdapter;
 import com.munifahsan.skdskb.Adapters.ListOneAdapter;
@@ -49,8 +66,15 @@ import com.munifahsan.skdskb.NotifPage.NotifActivity;
 import com.munifahsan.skdskb.R;
 import com.munifahsan.skdskb.Search.SearchActivity;
 import com.munifahsan.skdskb.SpacesItemDecoration;
+import com.munifahsan.skdskb.SubscribeActivity;
 import com.munifahsan.skdskb.Tryout.TryoutActivity;
 import com.munifahsan.skdskb.Video.VideoActivity;
+import com.readystatesoftware.viewbadger.BadgeView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,8 +82,9 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class HomeFragment extends Fragment implements HomeViewInt {
+public class HomeFragment extends Fragment implements HomeViewInt, PurchasesUpdatedListener {
 
+    private static final String LOG_TAG = "HomeFragment";
     @BindView(R.id.editText_search_home)
     EditText mSearchField;
     @BindView(R.id.imageView_closeKategori_home)
@@ -111,6 +136,12 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     @BindView(R.id.textView_talker_home2)
     TextView mTalker2;
 
+    @BindView(R.id.refresh)
+    SwipeRefreshLayout mRefresh;
+
+    @BindView(R.id.relative_notif_home)
+    RelativeLayout mNotifImage;
+
     private FirebaseAuth mAuth;
     private String mCurrent_id;
 
@@ -133,6 +164,20 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     private LinearLayoutManager mLayoutManager;
     private GridLayoutManager mGridLayoutManager;
 
+    BillingClient billingClient;
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener;
+    boolean isPremium = false;
+
+    BillingProcessor bp;
+
+    int a, b;
+
+    private static HomeFragment instance;
+
+    public static HomeFragment getInstance() {
+        return instance;
+    }
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -150,6 +195,83 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         ButterKnife.bind(this, view);
+
+        setupSubsBillingClient();
+        setupBillingClient();
+
+//        bp = new BillingProcessor(getActivity(), null, new BillingProcessor.IBillingHandler() {
+//            @Override
+//            public void onProductPurchased(String productId, TransactionDetails details) {
+//
+//            }
+//
+//            @Override
+//            public void onPurchaseHistoryRestored() {
+//                showMessage("onPurchaseHistoryRestored");
+//                for (String sku : bp.listOwnedProducts())
+//                    Log.d(LOG_TAG, "Owned Managed Product: " + sku);
+//                for (String sku : bp.listOwnedSubscriptions())
+//                    Log.d(LOG_TAG, "Owned Subscription: " + sku);
+//            }
+//
+//            @Override
+//            public void onBillingError(int errorCode, Throwable error) {
+//
+//            }
+//
+//            @Override
+//            public void onBillingInitialized() {
+//                showMessage("initialized");
+//            }
+//        });
+        //bp.initialize();
+
+//        boolean consumed = bp.consumePurchase("forever_buy");
+//
+//        if (consumed){
+//            showMessage("consumed");
+//        }
+
+//        if (bp.isPurchased("forever_buy")){
+//            //showMessage("purces");
+//            isPremium = true;
+//        }
+
+//        if (bp.loadOwnedPurchasesFromGoogle() && bp.isSubscribed("1_bulan")) {
+//            isPremium = true;
+//        }
+
+//        boolean purchaseResult = bp.loadOwnedPurchasesFromGoogle();
+//
+//        if (purchaseResult) {
+//            TransactionDetails subscriptionTransactionDetails = bp.getPurchaseTransactionDetails("forever_buy");
+//            if (subscriptionTransactionDetails != null) {
+//                //User is still subscribed
+//                isPremium = true;
+//                Log.d("BILLING v", "Subscription is valid");
+//            } else {
+//                //Not subscribed
+//                Log.d("BILLING v", "Subscription is NOT valid");
+//            }
+//        }
+//
+//        if (purchaseResult) {
+//            TransactionDetails subscriptionTransactionDetails = bp.getSubscriptionTransactionDetails("1_bulan");
+//            if (subscriptionTransactionDetails != null) {
+//                //User is still subscribed
+//                isPremium = true;
+//                Log.d("BILLING v", "Subscription is valid");
+//            } else {
+//                //Not subscribed
+//                Log.d("BILLING v", "Subscription is NOT valid");
+//            }
+//        }
+
+        instance = this;
+
+//        setupSubsBillingClient();
+//        setupBillingClient();
+
         mHomePres = new HomePres(this);
         mHomePres.onCreate();
         mAuth = FirebaseAuth.getInstance();
@@ -166,7 +288,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
             firebaseFirestore.collection("USERS").document(mCurrentUser.getUid()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.getResult().exists()){
+                    if (task.getResult().exists()) {
                         setmNama(mAuth.getCurrentUser().getProviderData().get(1).getDisplayName());
                         setmPhoto(mAuth.getCurrentUser().getProviderData().get(1).getPhotoUrl().toString());
                     } else {
@@ -213,11 +335,188 @@ public class HomeFragment extends Fragment implements HomeViewInt {
             }
         });
 
+        mRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                mHomePres.getData();
+                showKategori();
+                showAllKategori();
+                showListOne();
+                showListTwo();
+
+                notifCount();
+            }
+        });
+
         showKategori();
         showAllKategori();
         showListOne();
         showListTwo();
+
+        notifCount();
+
         return view;
+    }
+
+    private void setupSubsBillingClient() {
+
+        acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //mRvPurchase.setVisibility(View.VISIBLE);
+                }
+            }
+        };
+
+        billingClient = BillingClientSetup.getInstance(getActivity(), this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.SUBS)
+                            .getPurchasesList();
+
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                } else {
+                    Toast.makeText(getActivity(), "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                if (isAdded()){
+                    Toast.makeText(getActivity(), "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void setupBillingClient() {
+
+        billingClient = BillingClientSetup.getInstance(getActivity(), this);
+        billingClient.startConnection(new BillingClientStateListener() {
+            @Override
+            public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    //Toast.makeText(getActivity(), "Success to connect billing", Toast.LENGTH_SHORT).show();
+                    //Query
+                    List<Purchase> purchases = billingClient.queryPurchases(BillingClient.SkuType.INAPP)
+                            .getPurchasesList();
+                    // if (purchases.size() > 0) {
+                    if (purchases != null){
+                        for (Purchase purchase : purchases) {
+                            handleItemAlreadyPurchase(purchase);
+                        }
+                    }
+
+                    //}
+                } else {
+                    Toast.makeText(getActivity(), "Error code : " + billingResult.getResponseCode(), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onBillingServiceDisconnected() {
+                if (isAdded()){
+                    Toast.makeText(getActivity(), "You ara disconnected from Billing Service", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPurchasesUpdated(@NonNull BillingResult billingResult, @Nullable List<Purchase> list) {
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK && list != null) {
+            for (Purchase purchase : list) {
+                handleItemAlreadyPurchase(purchase);
+            }
+        }
+    }
+
+    private void handleItemAlreadyPurchase(Purchase purchases) {
+        if (purchases.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchases.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams = AcknowledgePurchaseParams.newBuilder()
+                        .setPurchaseToken(purchases.getPurchaseToken())
+                        .build();
+                billingClient.acknowledgePurchase(acknowledgePurchaseParams, acknowledgePurchaseResponseListener);
+            } else {
+                isPremium = true;
+                //showMessage("You are premium");
+            }
+        }
+    }
+
+    public void notifCount() {
+
+        mListRef.whereArrayContains("nSeen", mCurrentUser.getUid()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+//                Toast.makeText(getActivity(), queryDocumentSnapshots.size()+"", Toast.LENGTH_LONG).show();
+                a = queryDocumentSnapshots.size();
+
+                mListRef.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        b = queryDocumentSnapshots.size();
+
+                        //   Toast.makeText(getActivity(), b-a+"", Toast.LENGTH_LONG).show();
+                        showNotifCount(b - a);
+
+                        //showMessage("refresed");
+                    }
+                });
+            }
+        });
+
+        //refresh(1000);
+    }
+
+    public void showNotifCount(int count) {
+        if (mCurrentUser != null) {
+            if (count != 0) {
+                if (isAdded()) {
+                    BadgeView badge = new BadgeView(getActivity(), mNotifImage);
+                    badge.setText(String.valueOf(count));
+                    badge.show();
+                }
+            } else {
+                BadgeView badge = new BadgeView(getActivity(), mNotifImage);
+                badge.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    public static String getTimeDate(Date timestamp) {
+        try {
+            //Date netDate = (timestamp);
+            SimpleDateFormat sfd = new SimpleDateFormat("yyyyMddhhmmss", Locale.getDefault());
+            return sfd.format(timestamp);
+        } catch (Exception e) {
+            return "date";
+        }
+    }
+
+    private void refresh(int milliseconds) {
+        final Handler handler = new Handler();
+
+        final Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                notifCount();
+                getActivity();
+            }
+        };
+
+        handler.postDelayed(runnable, milliseconds);
     }
 
     @Override
@@ -248,6 +547,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                     mShimerKategori.setVisibility(View.GONE);
                     //showMessage("ada");
                 } else {
+                    hideQuote();
                     //mRvBeasiswaList.setVisibility(View.INVISIBLE);
 //                    mRvHottestEvent.setVisibility(View.VISIBLE);
                 }
@@ -273,6 +573,9 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 showMessage("clicked");
             }
         });
+
+        mKategoriAdapter.startListening();
+
     }
 
     private void showAllKategori() {
@@ -282,7 +585,8 @@ public class HomeFragment extends Fragment implements HomeViewInt {
 //        mKategoriContent.setVisibility(View.GONE);
 //        mShimerKategori.setVisibility(View.VISIBLE);
 
-        query = mKategoriRef.whereEqualTo("nHalaman", "MATERI");;
+        query = mKategoriRef.whereEqualTo("nHalaman", "MATERI");
+        ;
         FirestoreRecyclerOptions<KategoriModel> options = new FirestoreRecyclerOptions.Builder<KategoriModel>()
                 .setQuery(query, KategoriModel.class)
                 .build();
@@ -317,10 +621,12 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 intent.putExtra("COLLECTION", collection);
                 intent.putExtra("TIPE", "materi");
 
-
                 startActivity(intent);
             }
         });
+
+        mAllKategoriAdapter.startListening();
+
     }
 
     private void showListOne() {
@@ -385,6 +691,8 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 }
             }
         });
+
+        mListOneAdapter.startListening();
     }
 
     private void showListTwo() {
@@ -447,30 +755,77 @@ public class HomeFragment extends Fragment implements HomeViewInt {
                 }
             }
         });
+
+        mListTwoAdapter.startListening();
+
     }
 
-    private void sendToArtikel(String id, boolean isPremium) {
-        Intent intent = new Intent(getActivity(), ArticleActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToArtikel(String id, boolean isPremiumContent) {
+        if (isPremiumContent) {
+            if (isPremium) {
+                Intent intent = new Intent(getActivity(), ArticleActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), ArticleActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToVideo(String id, boolean isPremium) {
-        Intent intent = new Intent(getActivity(), VideoActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToVideo(String id, boolean isPremiumContent) {
+        if (isPremiumContent) {
+            if (isPremium) {
+                Intent intent = new Intent(getActivity(), VideoActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), VideoActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToEbook(String id, boolean isPremium) {
-        Intent intent = new Intent(getActivity(), EbookActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToEbook(String id, boolean isPremiumContent) {
+        if (isPremiumContent) {
+            if (isPremium) {
+                Intent intent = new Intent(getActivity(), EbookActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), EbookActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
-    private void sendToTryout(String id, boolean isPremium) {
-        Intent intent = new Intent(getActivity(), TryoutActivity.class);
-        intent.putExtra("DOCUMENT_ID", id);
-        startActivity(intent);
+    private void sendToTryout(String id, boolean isPremiumContent) {
+        if (isPremiumContent) {
+            if (isPremium) {
+                Intent intent = new Intent(getActivity(), TryoutActivity.class);
+                intent.putExtra("DOCUMENT_ID", id);
+                startActivity(intent);
+            } else {
+                showMessage("Upgrade untuk mengakses konten premium");
+            }
+        } else {
+            Intent intent = new Intent(getActivity(), TryoutActivity.class);
+            intent.putExtra("DOCUMENT_ID", id);
+            startActivity(intent);
+        }
+
     }
 
     @Override
@@ -521,7 +876,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
             Intent intent = new Intent(getActivity(), SearchActivity.class);
             intent.putExtra("SEARCH_VALUE", value);
             intent.putExtra("KATEGORI", "materi");
-           // intent.putExtra("TIPE", "materi");
+            // intent.putExtra("TIPE", "materi");
 
             startActivity(intent);
         } else {
@@ -572,7 +927,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     public void setmPhoto(String photo) {
         mShimmerPhoto.setVisibility(View.INVISIBLE);
         mPhoto.setVisibility(View.VISIBLE);
-        if (isAdded()){
+        if (isAdded()) {
             Glide.with(this)
                     .load(photo)
                     .fitCenter()
@@ -591,6 +946,7 @@ public class HomeFragment extends Fragment implements HomeViewInt {
         mQuoteShimmer.setVisibility(View.INVISIBLE);
         mQuote.setVisibility(View.VISIBLE);
         mQuote.setText(quote);
+        mRefresh.setRefreshing(false);
     }
 
     @Override
@@ -617,5 +973,11 @@ public class HomeFragment extends Fragment implements HomeViewInt {
     @Override
     public void showMessage(String msg) {
         Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (!bp.handleActivityResult(requestCode, resultCode, data))
+            super.onActivityResult(requestCode, resultCode, data);
     }
 }

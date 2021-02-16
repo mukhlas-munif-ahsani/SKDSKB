@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/bgPageSetting"
     android:layout_height="match_parent"
+    android:background="@color/bgPageSetting"
     tools:context=".SettingPage.SettingFragment">
 
     <ScrollView
@@ -210,7 +210,7 @@
                                 android:layout_centerVertical="true"
                                 android:layout_gravity="center"
                                 android:layout_marginStart="14dp"
-                                android:src="@drawable/google_icon" />
+                                android:src="@drawable/ic_baseline_subscriptions" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -320,6 +320,7 @@
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
+                    android:id="@+id/hubungiKami"
                     android:layout_marginBottom="0dp"
                     android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
@@ -336,12 +337,23 @@
                         android:text="Hubungi kami"
                         android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical|end"
+                        android:layout_marginEnd="@dimen/page_margin"
+                        android:text="kelasnesia@gmail.com"
+                        android:alpha="0.5"
+                        android:textColor="@color/txtItemColor"
+                        android:textSize="14sp" />
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
+                    android:id="@+id/syaratKetentuan"
                     android:backgroundTint="@color/bgPageBody"
                     android:clickable="true"
                     android:focusable="true"
@@ -360,6 +372,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_rate"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
@@ -403,6 +416,7 @@
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView_about"
                     android:layout_width="match_parent"
                     android:layout_height="60dp"
                     android:layout_marginBottom="0dp"
@@ -419,6 +433,73 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="@dimen/page_margin"
                         android:text="Tentang aplikasi"
+                        android:textColor="@color/txtItemColor"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/facebook"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginBottom="0dp"
+                    android:backgroundTint="@color/bgPageBody"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/custom_ripple"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:text="Facebook"
+                        android:textColor="@color/txtItemColor"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/instagram"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="0dp"
+                    android:backgroundTint="@color/bgPageBody"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/custom_ripple"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:text="Instagram"
+                        android:textColor="@color/txtItemColor"
+                        android:textSize="18sp" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/twitter"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginBottom="0dp"
+                    android:backgroundTint="@color/bgPageBody"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/custom_ripple"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="@dimen/page_margin"
+                        android:text="Twiter"
                         android:textColor="@color/txtItemColor"
                         android:textSize="18sp" />
                 </androidx.cardview.widget.CardView>
@@ -489,4 +570,98 @@
         </LinearLayout>
     </ScrollView>
 
-</FrameLayout>
+    <RelativeLayout
+        android:id="@+id/rel_about"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <RelativeLayout
+            android:id="@+id/aboutBg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.3"
+            android:background="@color/black" />
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            app:cardCornerRadius="6dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/imageView_aboutClose"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_baseline_close" />
+
+                <ImageView
+                    android:id="@+id/logo"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_below="@+id/imageView_aboutClose"
+                    android:layout_centerHorizontal="true"
+                    android:src="@drawable/google_icon" />
+
+                <TextView
+                    android:id="@+id/skdskb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/logo"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginStart="50dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="50dp"
+                    android:gravity="center"
+                    android:text="SKD SKB Indonesia"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <View
+                    android:id="@+id/batas"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@+id/skdskb"
+                    android:layout_marginStart="@dimen/page_margin"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="@dimen/page_margin"
+                    android:background="@color/grey" />
+
+                <TextView
+                    android:id="@+id/about_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/batas"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="24dp"
+                    android:gravity="center"
+                    android:text="@string/app_desc"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/about_desc"
+                    android:layout_marginStart="18dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="18dp"
+                    android:layout_marginBottom="25dp"
+                    android:gravity="center"
+                    android:text="@string/app_version"
+                    android:textSize="12sp" />
+            </RelativeLayout>
+
+
+        </androidx.cardview.widget.CardView>
+    </RelativeLayout>
+</RelativeLayout>

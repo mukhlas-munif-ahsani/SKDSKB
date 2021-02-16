@@ -5,6 +5,7 @@ import com.google.firebase.firestore.DocumentId;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 public class MateriModel {
     @DocumentId
@@ -13,6 +14,7 @@ public class MateriModel {
     String nThumbnailImageUrl;
     String nJenis;
     String nJenisImage;
+    List<String> nSeen;
     boolean premium;
     @ServerTimestamp
     Date nUploadTime;
@@ -46,5 +48,9 @@ public class MateriModel {
 
     public Date getnUploadTime() {
         return nUploadTime;
+    }
+
+    public List<String> getnSeen() {
+        return nSeen;
     }
 }
